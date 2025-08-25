@@ -36,4 +36,11 @@ public class CustomerController  extends BaseController{
             return ResponseEntity.ok(successResponse("Customer creation Failed" , Boolean.FALSE , customerDto));
         }
     }
+
+    public CustomerDto getCustomerByLibraryId(String libraryId) {
+        Customers customer = customerRepo.findByLibraryId(libraryId)
+                .orElseThrow(() -> new RuntimeException("Customer not found"));
+        return customerConverter.toDto(customer);
+    }
+
 }
