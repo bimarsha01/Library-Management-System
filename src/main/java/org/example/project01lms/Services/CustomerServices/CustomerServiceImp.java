@@ -44,7 +44,6 @@ public class CustomerServiceImp implements CustomerService {
 
     @Override
     public CustomerDto update(CustomerDto customerDto) {
-        // TODO: implement update properly
         return null;
     }
 
@@ -56,6 +55,12 @@ public class CustomerServiceImp implements CustomerService {
     @Override
     public CustomerDto findById(CustomerDto customerDto) {
         return null;
+    }
+
+    public CustomerDto getCustomerByLibraryId(String libraryId) {
+        Customers customer = customerRepo.findByLibraryId(libraryId)
+                .orElseThrow(() -> new RuntimeException("Customer not found"));
+        return customerConverter.toDto(customer);
     }
 
 }
