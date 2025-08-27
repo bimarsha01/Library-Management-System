@@ -17,6 +17,9 @@ public class BookConverter extends AbstractConverter<BooksDto , Book> {
        booksDto.setPublisherName(book.getPublisherName());
        booksDto.setIsbnNumber(book.getIsbnNumber());
        booksDto.setBookQuantity(book.getBookQuantity());
+       booksDto.setAvailableCopies(book.getAvailableCopies());
+       booksDto.setGenre(book.getGenre());
+       booksDto.setLanguage(book.getLanguage());
        return booksDto;
     }
 
@@ -37,6 +40,10 @@ public class BookConverter extends AbstractConverter<BooksDto , Book> {
   book.setAuthorName(booksDto.getAuthorName());
   book.setIsbnNumber(booksDto.getIsbnNumber());
   book.setBookQuantity(booksDto.getBookQuantity());
+  book.setAvailableCopies(booksDto.getAvailableCopies());
+  book.setGenre(booksDto.getGenre());
+  book.setLanguage(booksDto.getLanguage());
+
 
   return book;
     }

@@ -25,7 +25,7 @@ public class BooksDto {
 
     private String authorName;
 
-private Long BookQuantity;
+    private Long BookQuantity;
 
     private Long availableCopies;
 

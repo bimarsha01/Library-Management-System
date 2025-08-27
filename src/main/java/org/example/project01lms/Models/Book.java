@@ -28,13 +28,13 @@ public class Book {
     private String bookName;
     @Column(name = "publisher_name" , nullable = false , length = 100)
     private String publisherName;
-    @Column(name = "isbn_number" , nullable = false , length = 13)
+    @Column(name = "isbn_number" , nullable = false , length = 100)
     private String isbnNumber;
     @Column(name = "author_name" , nullable = false , length = 100)
     private String authorName;
     @Column(name = "book_quantity" , nullable = false , length = 5)
     private Long bookQuantity;
-    @Column(name = "availableCopies" , nullable = false , length = 5)
+    @Column(name = "available_copies" , nullable = false)
     private Long availableCopies;
     @Column(name = "genre"  , nullable = false , length = 20)
     private String genre;
