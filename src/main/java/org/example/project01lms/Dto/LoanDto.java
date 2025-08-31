@@ -17,14 +17,19 @@ public class LoanDto {
 
     private String libraryId;
 
+    public String bookName;
+
+    public String authorName;
+
     private String isbnNumber;
 
     private LocalDate borrowDate;
 
-    private LocalDate dueDate;
-
     private LocalDate returnDate;
+
+    private LocalDate dueDate;
 
     private Boolean status;
 
+    private Double fine;
 }

@@ -47,4 +47,13 @@ public class BookController extends BaseController{
                     .body("Failed to upload Excel: " + e.getMessage());
         }
     }
+    @PostMapping("/update")
+    public ResponseEntity<ApiResponse> updateBook(@RequestBody BooksDto booksDto){
+        booksDto = bookService.update(booksDto);
+        if (booksDto != null) {
+            return ResponseEntity.ok(successResponse("Book saved successfully", Boolean.TRUE, booksDto));
+        }else{
+            return ResponseEntity.ok(successResponse("Book saved Failed", Boolean.FALSE, booksDto));
+        }
+    }
 }

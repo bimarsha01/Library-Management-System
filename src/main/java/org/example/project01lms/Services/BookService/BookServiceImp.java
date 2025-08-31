@@ -1,19 +1,18 @@
 package org.example.project01lms.Services.BookService;
 
+import jakarta.transaction.Transactional;
 import org.example.project01lms.Converter.BookConverter;
 import org.example.project01lms.Dto.BooksDto;
+import org.example.project01lms.Mapper.BookMapper;
 import org.example.project01lms.Models.Book;
 import org.example.project01lms.Models.ExcelFile;
 import org.example.project01lms.Repo.BookRepo;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.ThreadLocalRandom;
 
 import static com.poiji.bind.Poiji.fromExcel;
 import static com.poiji.bind.Poiji.fromExcelProperties;
@@ -23,11 +22,12 @@ public class BookServiceImp  implements BookService {
 
     public BookConverter bookConverter;
     public BookRepo bookRepo;
+    private BookMapper bookMapper;
 
-
-    public BookServiceImp(BookConverter bookConverter, BookRepo bookRepo) {
+    public BookServiceImp(BookConverter bookConverter, BookRepo bookRepo , BookMapper bookMapper) {
         this.bookConverter = bookConverter;
         this.bookRepo = bookRepo;
+        this.bookMapper = bookMapper;
     }
 
     @Override
@@ -37,10 +37,17 @@ public class BookServiceImp  implements BookService {
         return bookConverter.toDto(book);
     }
 
-
+    @Transactional
     @Override
     public BooksDto update(BooksDto booksDto) {
-        return null;
+        Book book = bookRepo.findByIsbnNumber(booksDto.getIsbnNumber())
+                .orElseThrow(() -> new RuntimeException("Book not found"));
+
+        bookMapper.updateBookFromDto(booksDto, book);
+
+        bookRepo.save(book);
+
+        return bookMapper.toDto(book);
     }
 
     @Override
@@ -84,4 +91,6 @@ public class BookServiceImp  implements BookService {
             throw new RuntimeException(e);
         }
     }
+
+
 }

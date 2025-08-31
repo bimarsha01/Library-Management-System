@@ -33,11 +33,22 @@ public class Loan {
 @Column(name = "due_date" , nullable = false )
   private LocalDate dueDate;
 
-@Column(name = "return_date" , nullable = false )
+@Column(name = "return_date" )
   private LocalDate returnDate;
 
-@Column(name = "status")
+@Column(name = "status" )
     private Boolean status;
 
+@Column(name = "fine")
+private Double fine;
 
+    @PrePersist
+    public void prePersist() {
+        if (borrowDate == null) {
+            borrowDate = LocalDate.now();
+        }
+        if (status == null) {
+            status = true;
+        }
+    }
 }
