@@ -13,6 +13,7 @@ import org.example.project01lms.Repo.LoanRepo;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class LoanServiceImp implements LoanService {
@@ -43,25 +44,11 @@ public class LoanServiceImp implements LoanService {
 
     @Override
     public LoanDto returnBook(LoanDto loanDto) {
-Loan loan = new Loan();
-        Customers customers = (customerRepo.findByLibraryId(loanDto.getLibraryId())
-                .orElseThrow(() -> new RuntimeException("Customer not found")));
-
-        Book book = (bookRepo.findByIsbnNumber(loanDto.getIsbnNumber()))
-                .orElseThrow(() -> new RuntimeException("Book not found"));
-
-
-        loan.setCustomers(customers);
-        loan.setBook(book);
-
-        loan.setDueDate(loanDto.getDueDate());
-        loan.setBorrowDate(loanDto.getBorrowDate());
-
-        loan = loanRepo.save(loan);
-        validation.validateOnReturn(loan);
-
-        loanDto = loanConverter.toDto(loan);
-    return null;
+      Loan loan = (loanRepo.findByCustomers_libraryIdAndBook_isbnNumber(loanDto.getLibraryId(), loanDto.getIsbnNumber())
+              .orElseThrow(() -> new RuntimeException("Loan not found for this customer and book")));
+      validation.validateOnReturn(loan);
+      loan = loanRepo.save(loan);
+      return loanConverter.toDto(loan);
     }
 
     @Override

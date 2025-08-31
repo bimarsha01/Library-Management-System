@@ -41,6 +41,7 @@ public class LoanConverter extends AbstractConverter<LoanDto , Loan> {
        loanDto.setDueDate(loan.getDueDate());
        loanDto.setReturnDate(loan.getReturnDate());
        loanDto.setStatus(loan.getStatus());
+       loanDto.setFine(loan.getFine());
        return loanDto;
     }
 

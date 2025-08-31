@@ -13,7 +13,7 @@ public class Validation {
     public void validateOnReturn(Loan loan) {
         if(loan.getDueDate().isBefore(LocalDate.now())){
             loan.setStatus(false);
-            loan.setFine(100.00);
+            loan.setFine(loan.getFine() + 100.00);
         }
         loan.setReturnDate(LocalDate.now());
     }
