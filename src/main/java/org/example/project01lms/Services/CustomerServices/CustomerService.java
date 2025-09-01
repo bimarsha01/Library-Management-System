@@ -5,4 +5,5 @@ import org.example.project01lms.Models.Customers;
 import org.example.project01lms.Services.CRUDservies;
 
 public interface CustomerService extends CRUDservies<CustomerDto  , Customers> {
+    CustomerDto getCustomerByLibraryId(String libraryId);
 }

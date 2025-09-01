@@ -1,6 +1,8 @@
 package org.example.project01lms.Converter;
 
 import org.example.project01lms.Dto.LoanDto;
+import org.example.project01lms.ExceptionHandling.HandleTimeExceedException;
+import org.example.project01lms.ExceptionHandling.NotAvailableException;
 import org.example.project01lms.Helper.Eligibility;
 import org.example.project01lms.Helper.Validation;
 import org.example.project01lms.Models.Book;
@@ -54,12 +56,12 @@ public class LoanConverter extends AbstractConverter<LoanDto , Loan> {
     public Loan toEntity(LoanDto loanDto) {
         Loan loan = new Loan();
         Customers customers = (customerRepo.findByLibraryId(loanDto.getLibraryId())
-                .orElseThrow(() -> new RuntimeException("Customer not found")));
+                .orElseThrow(() -> new HandleTimeExceedException("LIMIT_EXCEEDED" , " Customer with library id " + loanDto.getLibraryId() + "has exceeded limit for 5 books")));
 
             eligibility.checkEligibilityOfCustomer(customers);
 
         Book book = (bookRepo.findByIsbnNumber(loanDto.getIsbnNumber()))
-                .orElseThrow(() -> new RuntimeException("Book not found"));
+                .orElseThrow(() -> new NotAvailableException("NOT_AVAILABLE" , "Book with isbnNumber " + loanDto.getIsbnNumber() + " is not available at the moment"));
             eligibility.checkAvailabilityOfBook(book);
         loan.setCustomers(customers);
         loan.setBook(book);

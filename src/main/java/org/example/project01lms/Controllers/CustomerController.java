@@ -6,6 +6,7 @@ import org.example.project01lms.Models.Customers;
 import org.example.project01lms.Repo.CustomerRepo;
 import org.example.project01lms.Response.ApiResponse;
 import org.example.project01lms.Services.CustomerServices.CustomerService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,20 +28,32 @@ public class CustomerController  extends BaseController{
 
 
     @PostMapping("/save")
-    public ResponseEntity<ApiResponse> createCustomer(@RequestBody CustomerDto customerDto){
+    public ResponseEntity<ApiResponse> createCustomer(@RequestBody CustomerDto customerDto) {
         customerDto = customerService.save(customerDto);
-        if(customerDto != null){
-            return ResponseEntity.ok(successResponse("Customer created Successfully" , Boolean.TRUE , customerDto));
-        }
-        else{
-            return ResponseEntity.ok(successResponse("Customer creation Failed" , Boolean.FALSE , customerDto));
+        if (customerDto != null) {
+            return ResponseEntity.ok(successResponse("Customer created Successfully", Boolean.TRUE, customerDto));
+        } else {
+            return ResponseEntity.ok(successResponse("Customer creation Failed", Boolean.FALSE, customerDto));
         }
     }
 
-    public CustomerDto getCustomerByLibraryId(String libraryId) {
-        Customers customer = customerRepo.findByLibraryId(libraryId)
-                .orElseThrow(() -> new RuntimeException("Customer not found"));
-        return customerConverter.toDto(customer);
+//    public CustomerDto getCustomerByLibraryId(String libraryId) {
+//        Customers customer = customerRepo.findByLibraryId(libraryId)
+//                .orElseThrow(() -> new RuntimeException("Customer not found"));
+//        return customerConverter.toDto(customer);
+//    }
+
+    @GetMapping("/find-by-lid")
+    public ResponseEntity<ApiResponse> getCustomerByLibraryId(@RequestParam String libraryId) {
+        CustomerDto customerDto = customerService.getCustomerByLibraryId(libraryId);
+
+        if (customerDto != null) {
+            return ResponseEntity.ok(successResponse("Customer found successfully", true, customerDto));
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(successResponse("Customer not found", false, null));
+        }
     }
+
 
 }

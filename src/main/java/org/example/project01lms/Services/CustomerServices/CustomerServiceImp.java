@@ -2,6 +2,7 @@ package org.example.project01lms.Services.CustomerServices;
 
 import org.example.project01lms.Converter.CustomerConverter;
 import org.example.project01lms.Dto.CustomerDto;
+import org.example.project01lms.ExceptionHandling.HandleDataException;
 import org.example.project01lms.Models.Customers;
 import org.example.project01lms.Repo.CustomerRepo;
 import org.springframework.stereotype.Service;
@@ -58,9 +59,10 @@ public class CustomerServiceImp implements CustomerService {
     }
 
     public CustomerDto getCustomerByLibraryId(String libraryId) {
-        Customers customer = customerRepo.findByLibraryId(libraryId)
-                .orElseThrow(() -> new RuntimeException("Customer not found"));
-        return customerConverter.toDto(customer);
+
+            Customers customer = customerRepo.findByLibraryId(libraryId)
+                    .orElseThrow(() -> new HandleDataException("Customer with " + libraryId + "not found"));
+            return customerConverter.toDto(customer);
     }
 
 }
