@@ -11,7 +11,6 @@ import org.example.project01lms.Models.Loan;
 import org.example.project01lms.Repo.BookRepo;
 import org.example.project01lms.Repo.CustomerRepo;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
