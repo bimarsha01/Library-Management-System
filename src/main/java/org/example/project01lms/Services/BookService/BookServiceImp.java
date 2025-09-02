@@ -3,6 +3,7 @@ package org.example.project01lms.Services.BookService;
 import jakarta.transaction.Transactional;
 import org.example.project01lms.Converter.BookConverter;
 import org.example.project01lms.Dto.BooksDto;
+import org.example.project01lms.ExceptionHandling.NotAvailableException;
 import org.example.project01lms.Mapper.BookMapper;
 import org.example.project01lms.Models.Book;
 import org.example.project01lms.Models.ExcelFile;
@@ -13,16 +14,17 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+
 import static com.poiji.bind.Poiji.fromExcel;
 
 @Service
-public class BookServiceImp  implements BookService {
+public class BookServiceImp implements BookService {
 
     public BookConverter bookConverter;
     public BookRepo bookRepo;
     private BookMapper bookMapper;
 
-    public BookServiceImp(BookConverter bookConverter, BookRepo bookRepo , BookMapper bookMapper) {
+    public BookServiceImp(BookConverter bookConverter, BookRepo bookRepo, BookMapper bookMapper) {
         this.bookConverter = bookConverter;
         this.bookRepo = bookRepo;
         this.bookMapper = bookMapper;
@@ -39,18 +41,18 @@ public class BookServiceImp  implements BookService {
     @Override
     public BooksDto update(BooksDto booksDto) {
         Book book = bookRepo.findByIsbnNumber(booksDto.getIsbnNumber())
-                .orElseThrow(() -> new RuntimeException("Book not found"));
+                .orElseThrow(() -> new NotAvailableException("NOT_AVAILABLE", "Book with isbnNumber" + booksDto.getIsbnNumber() + " is not available"));
 
         bookMapper.updateBookFromDto(booksDto, book);
-
         bookRepo.save(book);
-
         return bookMapper.toDto(book);
     }
 
     @Override
     public List<BooksDto> findall() {
-        return List.of();
+        List<Book> bookList = bookRepo.findAll();
+        return bookConverter.toDtoList(bookList);
+
     }
 
     @Override

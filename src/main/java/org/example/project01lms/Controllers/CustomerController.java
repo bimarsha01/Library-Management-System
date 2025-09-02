@@ -1,5 +1,6 @@
 package org.example.project01lms.Controllers;
 
+import lombok.extern.slf4j.Slf4j;
 import org.example.project01lms.Converter.CustomerConverter;
 import org.example.project01lms.Dto.CustomerDto;
 import org.example.project01lms.Models.Customers;
@@ -14,6 +15,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/customer")
+@Slf4j
 public class CustomerController  extends BaseController{
 
     public final CustomerService customerService;
@@ -29,27 +31,27 @@ public class CustomerController  extends BaseController{
 
     @PostMapping("/save")
     public ResponseEntity<ApiResponse> createCustomer(@RequestBody CustomerDto customerDto) {
+        log.info("Creating a customer {}" , customerDto.getLibraryId());
         customerDto = customerService.save(customerDto);
         if (customerDto != null) {
+            log.info("Created a customer Successfully with id {}" , customerDto.getLibraryId());
             return ResponseEntity.ok(successResponse("Customer created Successfully", Boolean.TRUE, customerDto));
         } else {
+            log.error("Customer creation failed");
             return ResponseEntity.ok(successResponse("Customer creation Failed", Boolean.FALSE, customerDto));
         }
     }
 
-//    public CustomerDto getCustomerByLibraryId(String libraryId) {
-//        Customers customer = customerRepo.findByLibraryId(libraryId)
-//                .orElseThrow(() -> new RuntimeException("Customer not found"));
-//        return customerConverter.toDto(customer);
-//    }
-
     @GetMapping("/find-by-lid")
     public ResponseEntity<ApiResponse> getCustomerByLibraryId(@RequestParam String libraryId) {
+        log.info("Finding Customer with the id {}" , libraryId);
         CustomerDto customerDto = customerService.getCustomerByLibraryId(libraryId);
 
         if (customerDto != null) {
+            log.info("Customer found successfully with id {}" , libraryId);
             return ResponseEntity.ok(successResponse("Customer found successfully", true, customerDto));
         } else {
+            log.warn("Unable to find a customer with id {}" , libraryId);
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(successResponse("Customer not found", false, null));
         }

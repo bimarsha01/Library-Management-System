@@ -1,33 +1,44 @@
 package org.example.project01lms.Services.CustomerServices;
 
+import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import org.example.project01lms.Converter.CustomerConverter;
 import org.example.project01lms.Dto.CustomerDto;
 import org.example.project01lms.ExceptionHandling.HandleDataException;
+import org.example.project01lms.ExceptionHandling.NotAvailableException;
+import org.example.project01lms.Helper.Validation;
+import org.example.project01lms.Mapper.CustomerMapper;
 import org.example.project01lms.Models.Customers;
 import org.example.project01lms.Repo.CustomerRepo;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
+
 
 @Service
+@Slf4j
 public class CustomerServiceImp implements CustomerService {
 
     private final CustomerConverter customerConverter;
     private final CustomerRepo customerRepo;
+    private final CustomerMapper customerMapper;
+    private final Validation validation;
 
-    public CustomerServiceImp(CustomerConverter customerConverter, CustomerRepo customerRepo) {
+    public CustomerServiceImp(CustomerConverter customerConverter, CustomerRepo customerRepo , CustomerMapper customerMapper , Validation validation) {
         this.customerConverter = customerConverter;
         this.customerRepo = customerRepo;
+        this.customerMapper = customerMapper;
+        this.validation = validation;
     }
 
     @Override
     public CustomerDto save(CustomerDto customerDto) {
+        log.info("Customer being created with unique id ");
         Customers customers = customerConverter.toEntity(customerDto);
 
         if (customerDto.getLibraryId() == null) {
-            String randomLid = generateUniqueLibraryId();
+            String randomLid = validation.generateUniqueLibraryId();
+            log.info("Customer created successfully with id {}", randomLid);
             customers.setLibraryId(randomLid);
         }
 
@@ -35,34 +46,48 @@ public class CustomerServiceImp implements CustomerService {
         return customerConverter.toDto(customers);
     }
 
-    private String generateUniqueLibraryId() {
-        String lid;
-        do {
-            lid = String.valueOf(ThreadLocalRandom.current().nextInt(100000, 1000000));
-        } while (customerRepo.existsByLibraryId(lid));
-        return lid;
-    }
-
     @Override
     public CustomerDto update(CustomerDto customerDto) {
-        return null;
+        throw new UnsupportedOperationException("Use updateCustomer() instead of update()");
     }
+
 
     @Override
     public List<CustomerDto> findall() {
-        return List.of();
+        List<Customers> customersList = customerRepo.findAll();
+        return customerConverter.toDtoList(customersList);
     }
 
     @Override
     public CustomerDto findById(CustomerDto customerDto) {
-        return null;
+       Customers customers = (customerRepo.findById(customerDto.getCustomerId())
+               .orElseThrow(() -> new NotAvailableException("NOT_FOUND" , "Customer with id "+ customerDto.getCustomerId() + "did not match to the database")));
+       log.info("Customer found successfully {} " , customerDto.getLibraryId());
+       return customerConverter.toDto(customers);
     }
 
     public CustomerDto getCustomerByLibraryId(String libraryId) {
-
             Customers customer = customerRepo.findByLibraryId(libraryId)
-                    .orElseThrow(() -> new HandleDataException("Customer with " + libraryId + "not found"));
+                    .orElseThrow(() -> new HandleDataException("Customer with " + libraryId + " not found"));
+            log.info("Customer found with lid {}" ,libraryId);
             return customerConverter.toDto(customer);
     }
 
-}
+    @Transactional
+    @Override
+    public CustomerDto updateCustomer(CustomerDto customerDto) {
+        log.info("Customer being updated {}" , customerDto.getLibraryId());
+        Customers customers = (customerRepo.findByLibraryId(customerDto.getLibraryId())
+                .orElseThrow(()-> new NotAvailableException("NOT_FOUND" , "Customer with lid "+ customerDto.getLibraryId()+ " not found")));
+
+        customerMapper.updateCustomerFromDto(customerDto , customers);
+
+        customerRepo.save(customers);
+        log.info("Customer updated Successfully {}" , customerDto.getLibraryId());
+        return customerMapper.toDto(customers);
+    }
+    }
+
+
+
+
