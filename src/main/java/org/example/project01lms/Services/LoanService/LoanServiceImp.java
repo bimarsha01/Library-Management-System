@@ -2,6 +2,7 @@ package org.example.project01lms.Services.LoanService;
 
 import org.example.project01lms.Converter.LoanConverter;
 import org.example.project01lms.Dto.LoanDto;
+import org.example.project01lms.ExceptionHandling.NotAvailableException;
 import org.example.project01lms.Helper.Eligibility;
 import org.example.project01lms.Helper.Validation;
 import org.example.project01lms.Models.Book;
@@ -35,14 +36,6 @@ public class LoanServiceImp implements LoanService {
     }
 
     @Override
-    public Object createLoan(LoanDto loanDto) {
-        Loan loan = loanConverter.toEntity(loanDto);
-        loan = loanRepo.save(loan);
-        loanDto = loanConverter.toDto(loan);
-        return loanDto;
-    }
-
-    @Override
     public LoanDto returnBook(LoanDto loanDto) {
       Loan loan = (loanRepo.findByCustomers_libraryIdAndBook_isbnNumber(loanDto.getLibraryId(), loanDto.getIsbnNumber())
               .orElseThrow(() -> new RuntimeException("Loan not found for this customer and book")));
@@ -53,21 +46,28 @@ public class LoanServiceImp implements LoanService {
 
     @Override
     public LoanDto save(LoanDto loanDto) {
-        return null;
+        Loan loan = loanConverter.toEntity(loanDto);
+        loan = loanRepo.save(loan);
+        loanDto = loanConverter.toDto(loan);
+        return loanDto;
     }
 
     @Override
     public LoanDto update(LoanDto loanDto) {
+
         return null;
     }
 
     @Override
     public List<LoanDto> findall() {
-        return List.of();
+       List<Loan> loanList = loanRepo.findAll();
+       return loanConverter.toDtoList(loanList);
     }
 
     @Override
     public LoanDto findById(LoanDto loanDto) {
-        return null;
+    Loan loan = loanRepo.findById(loanDto.getId())
+            .orElseThrow(() -> new NotAvailableException("NOT_FOUND", "Loan with id " + loanDto.getLibraryId() + "not found"));
+    return loanConverter.toDto(loan);
     }
 }

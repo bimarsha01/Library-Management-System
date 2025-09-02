@@ -9,5 +9,5 @@ import org.springframework.stereotype.Service;
 
 public interface BookService extends CRUDservies<BooksDto , Book> {
 
-
+    BooksDto getByIsbnNo(String isbnNumber);
 }

@@ -1,6 +1,7 @@
 package org.example.project01lms.Services.BookService;
 
 import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import org.example.project01lms.Converter.BookConverter;
 import org.example.project01lms.Dto.BooksDto;
 import org.example.project01lms.ExceptionHandling.NotAvailableException;
@@ -18,46 +19,58 @@ import java.util.List;
 import static com.poiji.bind.Poiji.fromExcel;
 
 @Service
+@Slf4j
 public class BookServiceImp implements BookService {
 
+    private final BookService bookService;
     public BookConverter bookConverter;
     public BookRepo bookRepo;
     private BookMapper bookMapper;
 
-    public BookServiceImp(BookConverter bookConverter, BookRepo bookRepo, BookMapper bookMapper) {
+    public BookServiceImp(BookConverter bookConverter, BookRepo bookRepo, BookMapper bookMapper, BookService bookService) {
         this.bookConverter = bookConverter;
         this.bookRepo = bookRepo;
         this.bookMapper = bookMapper;
+        this.bookService = bookService;
     }
 
     @Override
     public BooksDto save(BooksDto booksDto) {
+        log.info("Creating book");
         Book book = bookConverter.toEntity(booksDto);
         book = bookRepo.save(book);
+        log.info("Book added successfully with isbnNumber {} " , book.getIsbnNumber());
         return bookConverter.toDto(book);
     }
 
     @Transactional
     @Override
     public BooksDto update(BooksDto booksDto) {
+        log.info("Updating Book details");
         Book book = bookRepo.findByIsbnNumber(booksDto.getIsbnNumber())
                 .orElseThrow(() -> new NotAvailableException("NOT_AVAILABLE", "Book with isbnNumber" + booksDto.getIsbnNumber() + " is not available"));
 
         bookMapper.updateBookFromDto(booksDto, book);
         bookRepo.save(book);
+        log.info("Book details had been updated of {}" , booksDto.getIsbnNumber());
         return bookMapper.toDto(book);
     }
 
     @Override
     public List<BooksDto> findall() {
+        log.info("Listing the Books");
         List<Book> bookList = bookRepo.findAll();
+        log.info("Book list fetched");
         return bookConverter.toDtoList(bookList);
-
     }
 
     @Override
     public BooksDto findById(BooksDto booksDto) {
-        return null;
+        Book book = bookRepo.findById(booksDto.getBooksId())
+                .orElseThrow(() -> new NotAvailableException(
+                        "NOT_FOUND", "Book with id " + booksDto.getBooksId() + " not found"));
+
+        return bookConverter.toDto(book);
     }
 
     public BooksDto getByIsbnNo(String isbnNumber) {

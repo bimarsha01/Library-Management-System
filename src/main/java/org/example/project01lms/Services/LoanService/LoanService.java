@@ -5,7 +5,6 @@ import org.example.project01lms.Models.Loan;
 import org.example.project01lms.Services.CRUDservies;
 
 public interface LoanService extends CRUDservies<LoanDto , Loan> {
-Object createLoan(LoanDto loanDto);
 
 LoanDto returnBook(LoanDto loanDto);
 }

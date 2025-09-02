@@ -9,7 +9,8 @@ import java.util.Optional;
 public interface BookRepo extends JpaRepository<Book , Integer> {
     Optional<Book> findByIsbnNumber(String isbnNumber);
 
-    String isbnNumber(String isbnNumber);
+    String getByIsbnNo(String isbnNumber);
 
 
+    Optional<Book> findById(Long booksId);
 }
