@@ -23,7 +23,7 @@ public class LoanController extends BaseController {
     @Transactional
     public ResponseEntity<ApiResponse> setLoanForCustomer(@RequestBody LoanDto loanDto){
         log.info("Setting a loan for customer");
-    loanDto = (LoanDto) loanService.createLoan(loanDto);
+    loanDto =loanService.createLoan(loanDto);
         if(loanDto != null){
             log.info("Loan has been set for customer {}" , loanDto.getLibraryId());
             return ResponseEntity.ok(successResponse("Customer created Successfully" , Boolean.TRUE , loanDto));

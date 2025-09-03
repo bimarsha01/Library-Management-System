@@ -14,6 +14,9 @@ public interface BookMapper {
 
     BooksDto toDto(Book book);
 
+
+//    THIS  IS GENERALLY USED TO UPDATE SOME THINGS LIKE FROM THE ENTITY AND ALSO THE ATTRIBUTES NOT CHANGING THE ACTUAL ATTRIBUTE HELPING THE USER TO NOT CHANGE AND PASS EVERY OTHER FIELDS
+//    OR ATTRIBUTES MAKING IT MORE REASONALE
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateBookFromDto(BooksDto dto, @MappingTarget Book book);
 }
