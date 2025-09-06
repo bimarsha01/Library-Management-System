@@ -19,11 +19,15 @@ public class LoanController extends BaseController {
         this.loanService = loanService;
     }
 
-    @GetMapping("/get")
+    @PostMapping("/get")
     @Transactional
     public ResponseEntity<ApiResponse> setLoanForCustomer(@RequestBody LoanDto loanDto){
         log.info("Setting a loan for customer");
-    loanDto =loanService.createLoan(loanDto);
+        try {
+            loanDto = loanService.save(loanDto);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         if(loanDto != null){
             log.info("Loan has been set for customer {}" , loanDto.getLibraryId());
             return ResponseEntity.ok(successResponse("Customer created Successfully" , Boolean.TRUE , loanDto));
@@ -39,11 +43,23 @@ public class LoanController extends BaseController {
     public ResponseEntity<ApiResponse> returnBook(@RequestBody LoanDto loanDto){
         loanDto = loanService.returnBook(loanDto);
         if(loanDto != null){
-            return ResponseEntity.ok(successResponse("Customer created Successfully" , Boolean.TRUE , loanDto));
+            return ResponseEntity.ok(successResponse(" Customer Returned " , Boolean.TRUE , loanDto));
         }
         else{
-            return ResponseEntity.ok(successResponse("Customer creation Failed" , Boolean.FALSE , loanDto));
+            return ResponseEntity.ok(successResponse("Customer Returned Failed" , Boolean.FALSE , loanDto));
         }
     }
+
+    @GetMapping("/find-by-lid")
+    public ResponseEntity<ApiResponse> findById(@RequestBody LoanDto loanDto){
+       loanDto =  loanService.findById(loanDto);
+        if(loanDto != null){
+            return ResponseEntity.ok(successResponse(" Customer Returned " , Boolean.TRUE , loanDto));
+        }
+        else{
+            return ResponseEntity.ok(successResponse("Customer Returned Failed" , Boolean.FALSE , loanDto));
+        }
+    }
+
 
 }

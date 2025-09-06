@@ -4,6 +4,7 @@ import org.example.project01lms.Dto.BooksDto;
 import org.example.project01lms.Models.Book;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 @Component
@@ -14,12 +15,15 @@ public class BookConverter extends AbstractConverter<BooksDto , Book> {
        BooksDto booksDto = new BooksDto();
        booksDto.setBooksId(book.getBookId());
        booksDto.setBookName(book.getBookName());
+       booksDto.setAuthorName(book.getAuthorName());
        booksDto.setPublisherName(book.getPublisherName());
        booksDto.setIsbnNumber(book.getIsbnNumber());
        booksDto.setBookQuantity(book.getBookQuantity());
        booksDto.setAvailableCopies(book.getAvailableCopies());
        booksDto.setGenre(book.getGenre());
        booksDto.setLanguage(book.getLanguage());
+       booksDto.setCreatedAt(book.getCreatedAt());
+       booksDto.setUpdatedAt(book.getUpdatedAt());
        return booksDto;
     }
 

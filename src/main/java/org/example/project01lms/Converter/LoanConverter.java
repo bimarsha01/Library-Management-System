@@ -54,13 +54,14 @@ public class LoanConverter extends AbstractConverter<LoanDto , Loan> {
     @Override
     public Loan toEntity(LoanDto loanDto) {
         Loan loan = new Loan();
+
         Customers customers = (customerRepo.findByLibraryId(loanDto.getLibraryId())
                 .orElseThrow(() -> new HandleTimeExceedException("LIMIT_EXCEEDED" , " Customer with library id " + loanDto.getLibraryId() + "has exceeded limit for 5 books")));
 
-            eligibility.checkEligibilityOfCustomer(customers);
-
         Book book = (bookRepo.findByIsbnNumber(loanDto.getIsbnNumber()))
                 .orElseThrow(() -> new NotAvailableException("NOT_AVAILABLE" , "Book with isbnNumber " + loanDto.getIsbnNumber() + " is not available at the moment"));
+
+            eligibility.checkEligibilityOfCustomer(customers , book);
             eligibility.checkAvailabilityOfBook(book);
         loan.setCustomers(customers);
         loan.setBook(book);

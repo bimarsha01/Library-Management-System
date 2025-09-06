@@ -8,5 +8,4 @@ public interface LoanService extends CRUDservies<LoanDto , Loan> {
 
 LoanDto returnBook(LoanDto loanDto);
 
-LoanDto createLoan(LoanDto loanDto);
 }

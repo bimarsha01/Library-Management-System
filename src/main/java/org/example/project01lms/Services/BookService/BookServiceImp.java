@@ -22,16 +22,15 @@ import static com.poiji.bind.Poiji.fromExcel;
 @Slf4j
 public class BookServiceImp implements BookService {
 
-    private final BookService bookService;
+
     public BookConverter bookConverter;
     public BookRepo bookRepo;
     private BookMapper bookMapper;
 
-    public BookServiceImp(BookConverter bookConverter, BookRepo bookRepo, BookMapper bookMapper, BookService bookService) {
+    public BookServiceImp(BookConverter bookConverter, BookRepo bookRepo, BookMapper bookMapper) {
         this.bookConverter = bookConverter;
         this.bookRepo = bookRepo;
         this.bookMapper = bookMapper;
-        this.bookService = bookService;
     }
 
     @Override
@@ -86,15 +85,7 @@ public class BookServiceImp implements BookService {
 
             List<ExcelFile> excelBooks = fromExcel(tempfile, ExcelFile.class);
             for (ExcelFile excelBook : excelBooks) {
-                BooksDto dto = new BooksDto();
-                dto.setBookName(excelBook.getBookName());
-                dto.setAuthorName(excelBook.getAuthorName());
-                dto.setPublisherName(excelBook.getPublisherName());
-                dto.setIsbnNumber(excelBook.getIsbnNumber());
-                dto.setBookQuantity(Long.parseLong(excelBook.getBookQuantity()));
-                dto.setAvailableCopies(excelBook.getAvailableCopies());
-                dto.setGenre(excelBook.getGenre());
-                dto.setLanguage(excelBook.getLanguage());
+                BooksDto dto = getBooksDto(excelBook);
 
                 Book bookentity = bookConverter.toEntity(dto);
                 bookRepo.save(bookentity);
@@ -103,6 +94,19 @@ public class BookServiceImp implements BookService {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private static BooksDto getBooksDto(ExcelFile excelBook) {
+        BooksDto dto = new BooksDto();
+        dto.setBookName(excelBook.getBookName());
+        dto.setAuthorName(excelBook.getAuthorName());
+        dto.setPublisherName(excelBook.getPublisherName());
+        dto.setIsbnNumber(excelBook.getIsbnNumber());
+        dto.setBookQuantity(Long.parseLong(excelBook.getBookQuantity()));
+        dto.setAvailableCopies(excelBook.getAvailableCopies());
+        dto.setGenre(excelBook.getGenre());
+        dto.setLanguage(excelBook.getLanguage());
+        return dto;
     }
 
 

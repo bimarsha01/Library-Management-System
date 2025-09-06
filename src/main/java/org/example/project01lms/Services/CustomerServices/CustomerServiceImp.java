@@ -35,11 +35,11 @@ public class CustomerServiceImp implements CustomerService {
     public CustomerDto save(CustomerDto customerDto) {
         log.info("Customer being created with unique id ");
         Customers customers = customerConverter.toEntity(customerDto);
-
+        String randomLid;
         if (customerDto.getLibraryId() == null) {
-            String randomLid = validation.generateUniqueLibraryId();
-            log.info("Customer created successfully with id {}", randomLid);
+            randomLid = validation.generateUniqueLibraryId();
             customers.setLibraryId(randomLid);
+            log.info("Customer created successfully with id {}", randomLid);
         }
 
         customers = customerRepo.save(customers);

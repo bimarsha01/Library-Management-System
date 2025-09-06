@@ -13,10 +13,14 @@ public class Eligibility {
         this.loanRepo = loanRepo;
     }
 
-    public void checkEligibilityOfCustomer(Customers customers){
+    public void checkEligibilityOfCustomer(Customers customers , Book book){
         int activeLoan = loanRepo.countLoanByCustomers(customers);
-        if(activeLoan > 5){
+        if(activeLoan >= 5){
             throw new RuntimeException("Customer has reached max loan limit of 5 books");
+        }
+        int check = loanRepo.countByCustomers_LibraryIdAndBook_IsbnNumber(customers.getLibraryId(), book.getIsbnNumber() );
+        if(check > 1){
+            throw new RuntimeException("Customer cannot have more than one same book");
         }
     }
 

@@ -1,5 +1,6 @@
 package org.example.project01lms.Controllers;
 
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.example.project01lms.Dto.BooksDto;
 import org.example.project01lms.Repo.CustomerRepo;
@@ -32,7 +33,8 @@ public class BookController extends BaseController {
     }
 
 
-    @PostMapping("/save")
+    @PostMapping("/add")
+    @Transactional
     public ResponseEntity<ApiResponse> saveBook(@RequestBody BooksDto booksDto) {
         log.info("Saving Book with details");
         booksDto = bookService.save(booksDto);
@@ -40,6 +42,7 @@ public class BookController extends BaseController {
             log.info("Book has been saved");
             return ResponseEntity.ok(successResponse("Book saved successfully", Boolean.TRUE, booksDto));
         } else {
+            log.error("Book creation failed");
             return ResponseEntity.ok(successResponse("Book saved Failed", Boolean.FALSE, booksDto));
         }
     }
@@ -84,7 +87,7 @@ public class BookController extends BaseController {
         }
     }
 
-    @GetMapping("find-all")
+    @GetMapping("/find-all")
     public ResponseEntity<ApiResponse> findAll() {
         log.info("Fetching all the books");
         List<BooksDto> booksDto = bookService.findall();

@@ -3,15 +3,12 @@ package org.example.project01lms.Controllers;
 import lombok.extern.slf4j.Slf4j;
 import org.example.project01lms.Converter.CustomerConverter;
 import org.example.project01lms.Dto.CustomerDto;
-import org.example.project01lms.Models.Customers;
 import org.example.project01lms.Repo.CustomerRepo;
 import org.example.project01lms.Response.ApiResponse;
 import org.example.project01lms.Services.CustomerServices.CustomerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/customer")
@@ -29,7 +26,7 @@ public class CustomerController  extends BaseController{
     }
 
 
-    @PostMapping("/save")
+    @PostMapping("/create")
     public ResponseEntity<ApiResponse> createCustomer(@RequestBody CustomerDto customerDto) {
         log.info("Creating a customer {}" , customerDto.getLibraryId());
         customerDto = customerService.save(customerDto);
@@ -49,11 +46,11 @@ public class CustomerController  extends BaseController{
 
         if (customerDto != null) {
             log.info("Customer found successfully with id {}" , libraryId);
-            return ResponseEntity.ok(successResponse("Customer found successfully", true, customerDto));
+            return ResponseEntity.ok(successResponse("Customer found successfully", Boolean.TRUE, customerDto));
         } else {
             log.warn("Unable to find a customer with id {}" , libraryId);
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(successResponse("Customer not found", false, null));
+                    .body(successResponse("Customer not found", Boolean.FALSE, null));
         }
     }
 
