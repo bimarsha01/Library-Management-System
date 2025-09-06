@@ -13,6 +13,7 @@ import org.example.project01lms.Repo.CustomerRepo;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -24,7 +25,7 @@ public class CustomerServiceImp implements CustomerService {
     private final CustomerMapper customerMapper;
     private final Validation validation;
 
-    public CustomerServiceImp(CustomerConverter customerConverter, CustomerRepo customerRepo , CustomerMapper customerMapper , Validation validation) {
+    public CustomerServiceImp(CustomerConverter customerConverter, CustomerRepo customerRepo, CustomerMapper customerMapper, Validation validation) {
         this.customerConverter = customerConverter;
         this.customerRepo = customerRepo;
         this.customerMapper = customerMapper;
@@ -60,33 +61,42 @@ public class CustomerServiceImp implements CustomerService {
 
     @Override
     public CustomerDto findById(CustomerDto customerDto) {
-       Customers customers = (customerRepo.findById(customerDto.getCustomerId())
-               .orElseThrow(() -> new NotAvailableException("NOT_FOUND" , "Customer with id "+ customerDto.getCustomerId() + "did not match to the database")));
-       log.info("Customer found successfully {} " , customerDto.getLibraryId());
-       return customerConverter.toDto(customers);
+        Customers customers = (customerRepo.findById(customerDto.getCustomerId())
+                .orElseThrow(() -> new NotAvailableException("NOT_FOUND", "Customer with id " + customerDto.getCustomerId() + "did not match to the database")));
+        log.info("Customer found successfully {} ", customerDto.getLibraryId());
+        return customerConverter.toDto(customers);
     }
 
     public CustomerDto getCustomerByLibraryId(String libraryId) {
-            Customers customer = customerRepo.findByLibraryId(libraryId)
-                    .orElseThrow(() -> new HandleDataException("Customer with " + libraryId + " not found"));
-            log.info("Customer found with lid {}" ,libraryId);
-            return customerConverter.toDto(customer);
+        Customers customer = customerRepo.findByLibraryId(libraryId)
+                .orElseThrow(() -> new HandleDataException("Customer with " + libraryId + " not found"));
+        log.info("Customer found with lid {}", libraryId);
+        return customerConverter.toDto(customer);
     }
 
     @Transactional
     @Override
     public CustomerDto updateCustomer(CustomerDto customerDto) {
-        log.info("Customer being updated {}" , customerDto.getLibraryId());
+        log.info("Customer being updated {}", customerDto.getLibraryId());
         Customers customers = (customerRepo.findByLibraryId(customerDto.getLibraryId())
-                .orElseThrow(()-> new NotAvailableException("NOT_FOUND" , "Customer with lid "+ customerDto.getLibraryId()+ " not found")));
+                .orElseThrow(() -> new NotAvailableException("NOT_FOUND", "Customer with lid " + customerDto.getLibraryId() + " not found")));
 
-        customerMapper.updateCustomerFromDto(customerDto , customers);
+        customerMapper.updateCustomerFromDto(customerDto, customers);
 
         customerRepo.save(customers);
-        log.info("Customer updated Successfully {}" , customerDto.getLibraryId());
+        log.info("Customer updated Successfully {}", customerDto.getLibraryId());
         return customerMapper.toDto(customers);
     }
+
+    @Override
+    public CustomerDto removeCustomer(CustomerDto customerDto) {
+        Customers customers = customerRepo.findByLibraryId(customerDto.getLibraryId())
+                .orElseThrow(() -> new RuntimeException("There is no customer with the given Library id"));
+
+        customerRepo.delete(customers);
+        return customerConverter.toDto(customers);
     }
+}
 
 
 

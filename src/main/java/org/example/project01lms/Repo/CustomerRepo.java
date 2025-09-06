@@ -9,4 +9,6 @@ import java.util.Optional;
 public interface CustomerRepo extends JpaRepository<Customers, Long> {
     boolean existsByLibraryId(String randomLid);
     Optional<Customers> findByLibraryId(String lid);
+
+    Customers deleteCustomersByLibraryId(String libraryId);
 }

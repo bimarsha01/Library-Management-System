@@ -10,4 +10,6 @@ public interface CustomerService extends CRUDservies<CustomerDto  , Customers> {
 
     @Transactional
     CustomerDto  updateCustomer(CustomerDto customerDto);
+
+    CustomerDto removeCustomer(CustomerDto customerDto);
 }

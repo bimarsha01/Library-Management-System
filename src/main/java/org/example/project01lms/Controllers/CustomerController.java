@@ -3,6 +3,7 @@ package org.example.project01lms.Controllers;
 import lombok.extern.slf4j.Slf4j;
 import org.example.project01lms.Converter.CustomerConverter;
 import org.example.project01lms.Dto.CustomerDto;
+import org.example.project01lms.Models.Customers;
 import org.example.project01lms.Repo.CustomerRepo;
 import org.example.project01lms.Response.ApiResponse;
 import org.example.project01lms.Services.CustomerServices.CustomerService;
@@ -52,6 +53,12 @@ public class CustomerController  extends BaseController{
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(successResponse("Customer not found", Boolean.FALSE, null));
         }
+    }
+
+    @PostMapping("/delete")
+    public ResponseEntity<ApiResponse> deleteCustomer(@RequestBody CustomerDto customerDto){
+        log.warn("Customer with library id {} is set to be deleted" ,  customerDto.getLibraryId() );
+        customerDto = customerService.removeCustomer();
     }
 
 
