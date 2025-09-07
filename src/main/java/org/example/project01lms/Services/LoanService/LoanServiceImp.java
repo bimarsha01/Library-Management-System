@@ -2,7 +2,7 @@ package org.example.project01lms.Services.LoanService;
 
 import org.example.project01lms.Converter.LoanConverter;
 import org.example.project01lms.Dto.LoanDto;
-import org.example.project01lms.ExceptionHandling.NotAvailableException;
+import org.example.project01lms.ExceptionHandling.NotFoundException;
 import org.example.project01lms.Helper.Update;
 import org.example.project01lms.Helper.Validation;
 import org.example.project01lms.Models.Loan;
@@ -36,10 +36,11 @@ public class LoanServiceImp implements LoanService {
 
     @Override
     public LoanDto returnBook(LoanDto loanDto) {
+        LoanDto finalLoanDto = loanDto;
         Loan loan = loanRepo.findByCustomers_libraryIdAndBook_isbnNumber(
                 loanDto.getLibraryId(),
                 loanDto.getIsbnNumber()
-        ).orElseThrow(() -> new RuntimeException("Loan not found for this customer and book"));
+        ).orElseThrow(() -> new NotFoundException("NOT_FOUND" , "The user with library id " + finalLoanDto.getLibraryId() + " with isbn Number "+ finalLoanDto.getIsbnNumber() + "is not found"));
 
         validation.validateOnReturn(loan);
         update.updateOnReturn(loan);
@@ -72,7 +73,7 @@ public class LoanServiceImp implements LoanService {
     @Override
     public LoanDto findById(LoanDto loanDto) {
     Loan loan = (Loan) loanRepo.findByCustomers_libraryId(loanDto.getLibraryId())
-            .orElseThrow(() -> new NotAvailableException("NOT_FOUND", "Loan with id " + loanDto.getLibraryId() + "not found"));
+            .orElseThrow(() -> new NotFoundException("NOT_FOUND", "Loan with id " + loanDto.getLibraryId() + "not found"));
     return loanConverter.toDto(loan);
     }
 }

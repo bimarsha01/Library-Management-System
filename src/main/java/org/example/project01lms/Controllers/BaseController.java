@@ -14,4 +14,3 @@ public class BaseController {
 
 //made all of it some of them are like using Dto entity relation and others
 //now the things that are needed to learn are something like mapstruct and others to make the code
-//        more enthusist

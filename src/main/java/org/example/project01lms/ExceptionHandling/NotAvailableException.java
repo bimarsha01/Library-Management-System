@@ -1,5 +1,8 @@
 package org.example.project01lms.ExceptionHandling;
 
+import lombok.Getter;
+
+@Getter
 public class NotAvailableException extends  RuntimeException{
 
     private final String errorCode;
@@ -9,7 +12,4 @@ public class NotAvailableException extends  RuntimeException{
         this.errorCode = errorCode;
 
     }
-        public String  getErrorCode(){
-            return errorCode;
-        }
 }

@@ -3,7 +3,6 @@ package org.example.project01lms.Controllers;
 import lombok.extern.slf4j.Slf4j;
 import org.example.project01lms.Converter.CustomerConverter;
 import org.example.project01lms.Dto.CustomerDto;
-import org.example.project01lms.Models.Customers;
 import org.example.project01lms.Repo.CustomerRepo;
 import org.example.project01lms.Response.ApiResponse;
 import org.example.project01lms.Services.CustomerServices.CustomerService;
@@ -58,7 +57,16 @@ public class CustomerController  extends BaseController{
     @PostMapping("/delete")
     public ResponseEntity<ApiResponse> deleteCustomer(@RequestBody CustomerDto customerDto){
         log.warn("Customer with library id {} is set to be deleted" ,  customerDto.getLibraryId() );
-        customerDto = customerService.removeCustomer();
+        customerDto = customerService.removeCustomer(customerDto);
+        log.info("Customer is being removed");
+
+        if(customerDto != null){
+            log.info(("Customer removed successfully"));
+            return ResponseEntity.ok(successResponse("Customer Removed successfully", Boolean.TRUE, customerDto));
+        }
+        else{
+            return ResponseEntity.ok(successResponse("Customer remove failed", Boolean.TRUE, customerDto));
+        }
     }
 
 
