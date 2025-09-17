@@ -55,20 +55,20 @@ public class GlobalException  extends ResponseEntityExceptionHandler {
         ApiError error = new ApiError(ex.getMessage() , ex.getErrorCode() ,Boolean.FALSE );
         return new ResponseEntity<>(error , BAD_REQUEST);
     }
-    @ExceptionHandler(NotFoundException.class)
+    @ExceptionHandler(NotAvailableException.class)
     public ResponseEntity<ApiError> notFoundException(NotAvailableException ex){
         ApiError error = new ApiError("NOT_FOUND" , ex.getErrorCode() , Boolean.FALSE);
         return new ResponseEntity<>(error , BAD_REQUEST);
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity<ApiResponse> handleDataIntegrityViolation(DataIntegrityViolationException err){
+    public ResponseEntity<ApiError> handleDataIntegrityViolation(DataIntegrityViolationException err){
         ConstraintViolationException cve  = (ConstraintViolationException) err.getCause();
         String key = cve.getConstraintName();
         assert key != null;
         String[] constraintMessage = key.split("\\.");
         String constraintName = constraintMessage[1];
-        ApiResponse error = new ApiResponse(constraintName , Boolean.FALSE , err.getMostSpecificCause().getMessage());
+        ApiError error = new ApiError(constraintName,  err.getMostSpecificCause().getMessage(), Boolean.FALSE);
         return new ResponseEntity<>(error ,HttpStatus.INTERNAL_SERVER_ERROR);
     }
 

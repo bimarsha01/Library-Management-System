@@ -1,6 +1,7 @@
 package org.example.project01lms.Controllers;
 
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.example.project01lms.Dto.BooksDto;
 import org.example.project01lms.Repo.CustomerRepo;
@@ -35,7 +36,7 @@ public class BookController extends BaseController {
 
     @PostMapping("/add")
     @Transactional
-    public ResponseEntity<ApiResponse> saveBook(@RequestBody BooksDto booksDto) {
+    public ResponseEntity<ApiResponse> saveBook( @Valid @RequestBody BooksDto booksDto) {
         log.info("Saving Book with details");
         booksDto = bookService.save(booksDto);
         if (booksDto != null) {

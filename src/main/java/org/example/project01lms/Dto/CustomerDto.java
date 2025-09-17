@@ -1,14 +1,12 @@
 package org.example.project01lms.Dto;
 
-import jakarta.persistence.Column;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.example.project01lms.ExceptionHandling.FieldErrorConstant;
-import org.springframework.validation.FieldError;
+
 
 @Getter
 @Setter
@@ -17,18 +15,19 @@ import org.springframework.validation.FieldError;
 public class CustomerDto {
     private Long customerId;
 
-    @NotNull(message = FieldErrorConstant.NOT_NULL)
-    @NotEmpty(message = FieldErrorConstant.NOT_EMPTY)
+  @NotBlank(message = FieldErrorConstant.NOT_BLANK)
     private String fullName;
 
-    @NotNull(message = FieldErrorConstant.NOT_NULL)
-    @NotEmpty(message = FieldErrorConstant.NOT_EMPTY)
+    @NotBlank(message = FieldErrorConstant.NOT_BLANK)
+    @Email(message = "Enter correct format")
     private String email;
 
-    @NotNull(message = FieldErrorConstant.NOT_NULL)
-    @NotEmpty(message = FieldErrorConstant.NOT_EMPTY)
+    @NotBlank(message = FieldErrorConstant.NOT_BLANK)
     private String address;
 
+
+    @NotNull(message = FieldErrorConstant.NOT_NULL)
+    @Pattern(regexp="\\d{10}", message="Phone number must be 10 digits")
     private String phoneNo;
 
     private Boolean isActive;

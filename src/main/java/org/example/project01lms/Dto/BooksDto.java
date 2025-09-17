@@ -27,14 +27,20 @@ public class BooksDto {
     @NotEmpty(message = FieldErrorConstant.NOT_EMPTY)
     private String publisherName;
 
+    @NotNull(message = FieldErrorConstant.NOT_NULL)
+    @NotEmpty(message = FieldErrorConstant.NOT_EMPTY)
     private String isbnNumber;
 
     @NotNull(message = FieldErrorConstant.NOT_NULL)
     @NotEmpty(message = FieldErrorConstant.NOT_EMPTY)
     private String authorName;
 
+    @NotNull(message = FieldErrorConstant.NOT_NULL)
+    @NotEmpty(message = FieldErrorConstant.NOT_EMPTY)
     private Long BookQuantity;
 
+    @NotNull(message = FieldErrorConstant.NOT_NULL)
+    @NotEmpty(message = FieldErrorConstant.NOT_EMPTY)
     private Long availableCopies;
 
     @NotNull(message = FieldErrorConstant.NOT_NULL)
