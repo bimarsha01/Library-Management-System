@@ -18,7 +18,7 @@ public interface LoanRepo extends JpaRepository<Loan, Long> {
 
     @Modifying
     @Transactional
-    void removeLoanByCustomers_LibraryId(String libraryId);
+//    void removeLoanByCustomers_LibraryId(String libraryId);
 
     // Use proper return type for finding by ISBN
     Optional<Loan> findByBook_isbnNumber(String isbnNumber);
