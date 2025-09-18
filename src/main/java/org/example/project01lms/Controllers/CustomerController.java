@@ -1,5 +1,6 @@
 package org.example.project01lms.Controllers;
 
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.example.project01lms.Converter.CustomerConverter;
 import org.example.project01lms.Dto.CustomerDto;
@@ -27,7 +28,7 @@ public class CustomerController  extends BaseController{
 
 
     @PostMapping("/create")
-    public ResponseEntity<ApiResponse> createCustomer(@RequestBody CustomerDto customerDto) {
+    public ResponseEntity<ApiResponse> createCustomer(@Valid @RequestBody CustomerDto customerDto) {
         log.info("Creating a customer {}" , customerDto.getLibraryId());
         customerDto = customerService.save(customerDto);
         if (customerDto != null) {
@@ -40,7 +41,7 @@ public class CustomerController  extends BaseController{
     }
 
     @GetMapping("/find-by-lid")
-    public ResponseEntity<ApiResponse> getCustomerByLibraryId(@RequestParam String libraryId) {
+    public ResponseEntity<ApiResponse> getCustomerByLibraryId( @RequestParam String libraryId) {
         log.info("Finding Customer with the id {}" , libraryId);
         CustomerDto customerDto = customerService.getCustomerByLibraryId(libraryId);
 
@@ -62,6 +63,18 @@ public class CustomerController  extends BaseController{
 
         if(customerDto != null){
             log.info(("Customer removed successfully"));
+            return ResponseEntity.ok(successResponse("Customer Removed successfully", Boolean.TRUE, customerDto));
+        }
+        else{
+            return ResponseEntity.ok(successResponse("Customer remove failed", Boolean.TRUE, customerDto));
+        }
+    }
+
+    @PostMapping("/update")
+    public ResponseEntity<ApiResponse> updateCustomer(@RequestBody CustomerDto customerDto){
+        log.info("Update function will now come into the place");
+        customerDto = customerService.updateCustomer(customerDto);
+        if(customerDto !=null){
             return ResponseEntity.ok(successResponse("Customer Removed successfully", Boolean.TRUE, customerDto));
         }
         else{

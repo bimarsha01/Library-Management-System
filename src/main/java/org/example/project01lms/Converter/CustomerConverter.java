@@ -39,6 +39,7 @@ public class CustomerConverter extends AbstractConverter<CustomerDto , Customers
     Customers customers = new Customers();
     customers.setFullName(customerDto.getFullName());
     customers.setEmail(customerDto.getEmail());
+//    customers.setPassword(customerDto.getPassword());
     customers.setAddress(customerDto.getAddress());
     customers.setPhoneNo(customerDto.getPhoneNo());
     customers.setIsActive(customerDto.getIsActive());
