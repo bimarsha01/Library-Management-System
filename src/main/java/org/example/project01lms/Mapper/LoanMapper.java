@@ -1,21 +1,26 @@
 package org.example.project01lms.Mapper;
 
 import org.example.project01lms.Dto.CustomerDto;
+import org.example.project01lms.Dto.LoanDto;
 import org.example.project01lms.Models.Customers;
+import org.example.project01lms.Models.Loan;
 import org.mapstruct.*;
 
 import java.util.List;
 
 @Mapper(componentModel = "spring")
-public interface CustomerMapper {
+
+public interface LoanMapper {
+
     @Mapping(target = "id", ignore = true)
-    Customers toEntity(CustomerDto dto);
+    Loan toEntity(LoanDto dto);
 
-    CustomerDto toDto(Customers customers);
+    LoanDto toDto(Loan loan);
 
-    List<CustomerDto> toDtoList(List<Customers> customersList);
+    List<LoanDto> toDtoList(List<Loan> loanList);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    void updateCustomerFromDto(CustomerDto dto, @MappingTarget Customers customers);
+    void updateLoanFromDto(CustomerDto dto, @MappingTarget Customers customers);
+
 
 }

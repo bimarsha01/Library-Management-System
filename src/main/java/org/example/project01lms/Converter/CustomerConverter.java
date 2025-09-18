@@ -1,6 +1,8 @@
 package org.example.project01lms.Converter;
 
+import org.example.project01lms.Dto.BooksDto;
 import org.example.project01lms.Dto.CustomerDto;
+import org.example.project01lms.Models.Book;
 import org.example.project01lms.Models.Customers;
 import org.springframework.stereotype.Component;
 
@@ -33,6 +35,7 @@ public class CustomerConverter extends AbstractConverter<CustomerDto , Customers
             }
             return customerDtoList;
     }
+
 
     @Override
     public Customers toEntity(CustomerDto customerDto) {
