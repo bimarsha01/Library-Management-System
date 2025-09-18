@@ -7,13 +7,17 @@ import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring")
 public interface BookMapper {
 
     Book toEntity(BooksDto dto);
 
     BooksDto toDto(Book book);
+    List<BooksDto> toDtoList(List<Book> bookList);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateBookFromDto(BooksDto dto, @MappingTarget Book book);
+
 }

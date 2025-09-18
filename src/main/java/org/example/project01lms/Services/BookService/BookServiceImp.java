@@ -39,7 +39,7 @@ public class BookServiceImp implements BookService {
         Book book = bookConverter.toEntity(booksDto);
         book = bookRepo.save(book);
         log.info("Book added successfully with isbnNumber {} " , book.getIsbnNumber());
-        return bookConverter.toDto(book);
+        return bookMapper.toDto(book);
     }
 
     @Transactional
@@ -60,7 +60,7 @@ public class BookServiceImp implements BookService {
         log.info("Listing the Books");
         List<Book> bookList = bookRepo.findAll();
         log.info("Book list fetched");
-        return bookConverter.toDtoList(bookList);
+        return bookMapper.toDtoList(bookList);
     }
 
     @Override
@@ -75,7 +75,7 @@ public class BookServiceImp implements BookService {
     public BooksDto getByIsbnNo(String isbnNumber) {
         Book book = bookRepo.findByIsbnNumber(isbnNumber)
                 .orElseThrow(() -> new RuntimeException("Customer not found"));
-        return bookConverter.toDto(book);
+        return bookMapper.toDto(book);
     }
 
     public void saveFromExcel(MultipartFile file) {

@@ -43,7 +43,7 @@ public class CustomerServiceImp implements CustomerService {
         }
 
         customers = customerRepo.save(customers);
-        return customerConverter.toDto(customers);
+        return customerMapper.toDto(customers);
     }
 
     @Override
@@ -55,7 +55,7 @@ public class CustomerServiceImp implements CustomerService {
     @Override
     public List<CustomerDto> findall() {
         List<Customers> customersList = customerRepo.findAll();
-        return customerConverter.toDtoList(customersList);
+        return customerMapper.toDtoList(customersList);
     }
 
     @Override
@@ -63,14 +63,14 @@ public class CustomerServiceImp implements CustomerService {
         Customers customers = (customerRepo.findById(customerDto.getCustomerId())
                 .orElseThrow(() -> new NotAvailableException("NOT_FOUND", "Customer with id " + customerDto.getCustomerId() + "did not match to the database")));
         log.info("Customer found successfully {} ", customerDto.getLibraryId());
-        return customerConverter.toDto(customers);
+        return customerMapper.toDto(customers);
     }
 
     public CustomerDto getCustomerByLibraryId(String libraryId) {
         Customers customer = customerRepo.findByLibraryId(libraryId)
                 .orElseThrow(() -> new HandleDataException("Customer with " + libraryId + " not found"));
         log.info("Customer found with lid {}", libraryId);
-        return customerConverter.toDto(customer);
+        return customerMapper.toDto(customer);
     }
 
     @Transactional
@@ -93,7 +93,7 @@ public class CustomerServiceImp implements CustomerService {
                 .orElseThrow(() -> new RuntimeException("There is no customer with the given Library id"));
 
         customerRepo.delete(customers);
-        return customerConverter.toDto(customers);
+        return customerMapper.toDto(customers);
     }
 }
 
