@@ -1,4 +1,4 @@
-package org.example.project01lms.Dto;
+package org.example.project01lms.Dto.LoanDto;
 
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;

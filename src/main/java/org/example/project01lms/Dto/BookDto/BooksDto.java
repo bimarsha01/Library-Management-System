@@ -1,6 +1,5 @@
-package org.example.project01lms.Dto;
+package org.example.project01lms.Dto.BookDto;
 
-import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -18,7 +17,9 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BooksDto {
+
     private Long booksId;
+
     @NotNull(message = FieldErrorConstant.NOT_NULL)
     @NotEmpty(message = FieldErrorConstant.NOT_EMPTY)
     private String bookName;

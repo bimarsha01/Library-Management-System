@@ -1,6 +1,6 @@
 package org.example.project01lms.Mapper;
 
-import org.example.project01lms.Dto.BooksDto;
+import org.example.project01lms.Dto.BookDto.BooksDto;
 import org.example.project01lms.Models.Book;
 import org.mapstruct.*;
 

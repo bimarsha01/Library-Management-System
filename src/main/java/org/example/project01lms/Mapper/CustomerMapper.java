@@ -1,6 +1,9 @@
 package org.example.project01lms.Mapper;
 
-import org.example.project01lms.Dto.CustomerDto;
+import org.example.project01lms.Dto.CustomerDto.CustomerCreationDto;
+import org.example.project01lms.Dto.CustomerDto.CustomerDto;
+import org.example.project01lms.Dto.CustomerDto.CustomerResponseDto;
+import org.example.project01lms.Dto.CustomerDto.CustomerUpdationDto;
 import org.example.project01lms.Models.Customers;
 import org.mapstruct.*;
 
@@ -9,13 +12,13 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface CustomerMapper {
     @Mapping(target = "id", ignore = true)
-    Customers toEntity(CustomerDto dto);
+    Customers toEntity(CustomerCreationDto dto);
 
-    CustomerDto toDto(Customers customers);
+    CustomerResponseDto toDto(Customers customers);
 
-    List<CustomerDto> toDtoList(List<Customers> customersList);
+    List<CustomerResponseDto> toDtoList(List<Customers> customersList);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    void updateCustomerFromDto(CustomerDto dto, @MappingTarget Customers customers);
+    CustomerUpdationDto updateCustomerFromDto(CustomerUpdationDto dto, @MappingTarget Customers customers);
 
 }

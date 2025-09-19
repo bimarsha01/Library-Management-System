@@ -2,7 +2,7 @@ package org.example.project01lms.Controllers;
 
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
-import org.example.project01lms.Dto.LoanDto;
+import org.example.project01lms.Dto.LoanDto.LoanDto;
 import org.example.project01lms.Response.ApiResponse;
 import org.example.project01lms.Services.LoanService.LoanService;
 import org.springframework.http.ResponseEntity;

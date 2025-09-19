@@ -1,4 +1,4 @@
-package org.example.project01lms.Dto;
+package org.example.project01lms.Dto.CustomerDto;
 
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
@@ -7,16 +7,18 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.example.project01lms.ExceptionHandling.FieldErrorConstant;
 
-
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CustomerDto {
-    private Long customerId;
+public class CustomerCreationDto {
 
-  @NotBlank(message = FieldErrorConstant.NOT_BLANK)
+    @NotBlank(message = FieldErrorConstant.NOT_BLANK)
     private String fullName;
+
+    @NotBlank(message = FieldErrorConstant.NOT_BLANK)
+    @Size(min = 8 , max = 20 , message = "Minimum of eight characters and maximum of 20 characters")
+    private String password;
 
     @NotBlank(message = FieldErrorConstant.NOT_BLANK)
     @Email(message = "Enter correct format")
@@ -25,13 +27,7 @@ public class CustomerDto {
     @NotBlank(message = FieldErrorConstant.NOT_BLANK)
     private String address;
 
-
     @NotNull(message = FieldErrorConstant.NOT_NULL)
     @Pattern(regexp="\\d{10}", message="Phone number must be 10 digits")
     private String phoneNo;
-
-    private Boolean isActive;
-
-    private String libraryId;
-
 }

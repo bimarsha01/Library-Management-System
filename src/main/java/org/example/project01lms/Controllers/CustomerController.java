@@ -3,7 +3,10 @@ package org.example.project01lms.Controllers;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.example.project01lms.Converter.CustomerConverter;
-import org.example.project01lms.Dto.CustomerDto;
+import org.example.project01lms.Dto.CustomerDto.CustomerCreationDto;
+import org.example.project01lms.Dto.CustomerDto.CustomerDto;
+import org.example.project01lms.Dto.CustomerDto.CustomerResponseDto;
+import org.example.project01lms.Dto.CustomerDto.CustomerUpdationDto;
 import org.example.project01lms.Repo.CustomerRepo;
 import org.example.project01lms.Response.ApiResponse;
 import org.example.project01lms.Services.CustomerServices.CustomerService;
@@ -28,26 +31,32 @@ public class CustomerController  extends BaseController{
 
 
     @PostMapping("/create")
-    public ResponseEntity<ApiResponse> createCustomer(@Valid @RequestBody CustomerDto customerDto) {
-        log.info("Creating a customer {}" , customerDto.getLibraryId());
-        customerDto = customerService.save(customerDto);
-        if (customerDto != null) {
-            log.info("Created a customer Successfully with id {}" , customerDto.getLibraryId());
-            return ResponseEntity.ok(successResponse("Customer created Successfully", Boolean.TRUE, customerDto));
+    public ResponseEntity<ApiResponse> createCustomer(
+            @Valid @RequestBody CustomerCreationDto customerCreationDto) {
+
+        CustomerResponseDto createdCustomer = customerService.save(customerCreationDto);
+
+        if (createdCustomer != null) {
+            log.info("Created a customer successfully with id {}", createdCustomer.getLibraryId());
+            return ResponseEntity.ok(
+                    successResponse("Customer created successfully", Boolean.TRUE, createdCustomer)
+            );
         } else {
             log.error("Customer creation failed");
-            return ResponseEntity.ok(successResponse("Customer creation Failed", Boolean.FALSE, customerDto));
+            return ResponseEntity.ok(
+                    successResponse("Customer creation failed", Boolean.FALSE, null)
+            );
         }
     }
 
-    @GetMapping("/find-by-lid")
-    public ResponseEntity<ApiResponse> getCustomerByLibraryId( @RequestParam String libraryId) {
+    @GetMapping("/find-by-lid/{libraryId}")
+    public ResponseEntity<ApiResponse> findById(@PathVariable String libraryId) {
         log.info("Finding Customer with the id {}" , libraryId);
-        CustomerDto customerDto = customerService.getCustomerByLibraryId(libraryId);
+        CustomerResponseDto responseDto = customerService.getCustomerByLibraryId(libraryId);
 
-        if (customerDto != null) {
+        if (responseDto != null) {
             log.info("Customer found successfully with id {}" , libraryId);
-            return ResponseEntity.ok(successResponse("Customer found successfully", Boolean.TRUE, customerDto));
+            return ResponseEntity.ok(successResponse("Customer found successfully", Boolean.TRUE, responseDto));
         } else {
             log.warn("Unable to find a customer with id {}" , libraryId);
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -55,30 +64,32 @@ public class CustomerController  extends BaseController{
         }
     }
 
-    @PostMapping("/delete")
-    public ResponseEntity<ApiResponse> deleteCustomer(@RequestBody CustomerDto customerDto){
-        log.warn("Customer with library id {} is set to be deleted" ,  customerDto.getLibraryId() );
-        customerDto = customerService.removeCustomer(customerDto);
+    @PostMapping("/delete/{libraryId}")
+    public ResponseEntity<ApiResponse> deleteCustomer(@PathVariable String libraryId){
+        log.warn("Customer with library id {} is set to be deleted" , libraryId);
+        CustomerResponseDto  response = customerService.removeCustomer(libraryId);
         log.info("Customer is being removed");
 
-        if(customerDto != null){
+        if(response != null){
             log.info(("Customer removed successfully"));
-            return ResponseEntity.ok(successResponse("Customer Removed successfully", Boolean.TRUE, customerDto));
+            return ResponseEntity.ok(successResponse("Customer Removed successfully", Boolean.TRUE, response));
         }
         else{
-            return ResponseEntity.ok(successResponse("Customer remove failed", Boolean.TRUE, customerDto));
+            return ResponseEntity.ok(successResponse("Customer remove failed", Boolean.TRUE, null));
         }
     }
 
-    @PostMapping("/update")
-    public ResponseEntity<ApiResponse> updateCustomer(@RequestBody CustomerDto customerDto){
+    @PostMapping("/update/{libraryId}")
+    public ResponseEntity<ApiResponse> updateCustomer(
+            @PathVariable String libraryId,
+          @Valid  @RequestBody CustomerUpdationDto customerUpdationDto){
         log.info("Update function will now come into the place");
-        customerDto = customerService.updateCustomer(customerDto);
-        if(customerDto !=null){
-            return ResponseEntity.ok(successResponse("Customer Removed successfully", Boolean.TRUE, customerDto));
+        CustomerResponseDto responseDto = customerService.updateCustomer(libraryId , customerUpdationDto);
+        if(responseDto !=null){
+            return ResponseEntity.ok(successResponse("Customer Removed successfully", Boolean.TRUE, responseDto));
         }
         else{
-            return ResponseEntity.ok(successResponse("Customer remove failed", Boolean.TRUE, customerDto));
+            return ResponseEntity.ok(successResponse("Customer remove failed", Boolean.TRUE, null));
         }
     }
 

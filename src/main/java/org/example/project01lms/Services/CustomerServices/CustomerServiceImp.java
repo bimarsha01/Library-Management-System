@@ -3,7 +3,10 @@ package org.example.project01lms.Services.CustomerServices;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.example.project01lms.Converter.CustomerConverter;
-import org.example.project01lms.Dto.CustomerDto;
+import org.example.project01lms.Dto.CustomerDto.CustomerCreationDto;
+import org.example.project01lms.Dto.CustomerDto.CustomerDto;
+import org.example.project01lms.Dto.CustomerDto.CustomerResponseDto;
+import org.example.project01lms.Dto.CustomerDto.CustomerUpdationDto;
 import org.example.project01lms.ExceptionHandling.HandleDataException;
 import org.example.project01lms.ExceptionHandling.NotAvailableException;
 import org.example.project01lms.Helper.Validation;
@@ -32,41 +35,37 @@ public class CustomerServiceImp implements CustomerService {
     }
 
     @Override
-    public CustomerDto save(CustomerDto customerDto) {
+    public CustomerResponseDto save(CustomerCreationDto customerCreationDto) {
         log.info("Customer being created with unique id ");
-        Customers customers = customerConverter.toEntity(customerDto);
+        Customers customers = customerMapper.toEntity(customerCreationDto);
         String randomLid;
-        if (customerDto.getLibraryId() == null) {
             randomLid = validation.generateUniqueLibraryId();
             customers.setLibraryId(randomLid);
             log.info("Customer created successfully with id {}", randomLid);
-        }
 
         customers = customerRepo.save(customers);
-        return customerMapper.toDto(customers);
+        CustomerResponseDto responseDto =  customerMapper.toDto(customers);
+        return responseDto;
     }
 
     @Override
-    public CustomerDto update(CustomerDto customerDto) {
+    public CustomerResponseDto update(CustomerCreationDto customerDto) {
         throw new UnsupportedOperationException("Use updateCustomer() instead of update()");
     }
 
 
     @Override
-    public List<CustomerDto> findall() {
+    public List<CustomerResponseDto> findAll() {
         List<Customers> customersList = customerRepo.findAll();
-        return customerMapper.toDtoList(customersList);
+        List<CustomerResponseDto> responseDto =customerMapper.toDtoList(customersList);
+        return responseDto;
     }
 
     @Override
-    public CustomerDto findById(CustomerDto customerDto) {
-        Customers customers = (customerRepo.findById(customerDto.getCustomerId())
-                .orElseThrow(() -> new NotAvailableException("NOT_FOUND", "Customer with id " + customerDto.getCustomerId() + "did not match to the database")));
-        log.info("Customer found successfully {} ", customerDto.getLibraryId());
-        return customerMapper.toDto(customers);
+    public CustomerResponseDto findById(Long Id) {
+        return null;
     }
-
-    public CustomerDto getCustomerByLibraryId(String libraryId) {
+    public CustomerResponseDto getCustomerByLibraryId(String libraryId) {
         Customers customer = customerRepo.findByLibraryId(libraryId)
                 .orElseThrow(() -> new HandleDataException("Customer with " + libraryId + " not found"));
         log.info("Customer found with lid {}", libraryId);
@@ -75,21 +74,22 @@ public class CustomerServiceImp implements CustomerService {
 
     @Transactional
     @Override
-    public CustomerDto updateCustomer(CustomerDto customerDto) {
-        log.info("Customer being updated {}", customerDto.getLibraryId());
-        Customers customers = (customerRepo.findByLibraryId(customerDto.getLibraryId())
-                .orElseThrow(() -> new NotAvailableException("NOT_FOUND", "Customer with lid " + customerDto.getLibraryId() + " not found")));
+    public CustomerResponseDto updateCustomer(String  libraryId ,  CustomerUpdationDto customerUpdationDto) {
+        log.info("Customer being updated {}", libraryId);
+        Customers customers = (customerRepo.findByLibraryId(libraryId)
+                .orElseThrow(() -> new NotAvailableException("NOT_FOUND", "Customer with lid " + libraryId + " not found")));
 
-        customerMapper.updateCustomerFromDto(customerDto, customers);
+        customerMapper.updateCustomerFromDto(customerUpdationDto, customers);
 
         customerRepo.save(customers);
-        log.info("Customer updated Successfully {}", customerDto.getLibraryId());
-        return customerMapper.toDto(customers);
+        log.info("Customer updated Successfully {}",libraryId);
+        CustomerResponseDto responseDto =  customerMapper.toDto(customers);
+        return responseDto;
     }
 
     @Override
-    public CustomerDto removeCustomer(CustomerDto customerDto) {
-        Customers customers = customerRepo.findByLibraryId(customerDto.getLibraryId())
+    public CustomerResponseDto removeCustomer(CustomerResponseDto customerResponseDto) {
+        Customers customers = customerRepo.findByLibraryId(customerResponseDto.getLibraryId())
                 .orElseThrow(() -> new RuntimeException("There is no customer with the given Library id"));
 
         customerRepo.delete(customers);

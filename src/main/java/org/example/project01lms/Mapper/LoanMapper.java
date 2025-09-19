@@ -1,8 +1,6 @@
 package org.example.project01lms.Mapper;
 
-import org.example.project01lms.Dto.CustomerDto;
-import org.example.project01lms.Dto.LoanDto;
-import org.example.project01lms.Models.Customers;
+import org.example.project01lms.Dto.LoanDto.LoanDto;
 import org.example.project01lms.Models.Loan;
 import org.mapstruct.*;
 
@@ -20,7 +18,8 @@ public interface LoanMapper {
     List<LoanDto> toDtoList(List<Loan> loanList);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    void updateLoanFromDto(CustomerDto dto, @MappingTarget Customers customers);
+    void updateLoanFromDto(LoanDto dto, @MappingTarget Loan loan);
+
 
 
 }

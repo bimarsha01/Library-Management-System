@@ -1,7 +1,6 @@
 package org.example.project01lms.Converter;
 
-import org.example.project01lms.Dto.LoanDto;
-import org.example.project01lms.ExceptionHandling.HandleTimeExceedException;
+import org.example.project01lms.Dto.LoanDto.LoanDto;
 import org.example.project01lms.ExceptionHandling.NotAvailableException;
 import org.example.project01lms.Helper.Eligibility;
 import org.example.project01lms.Helper.Validation;

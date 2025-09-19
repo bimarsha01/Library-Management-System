@@ -3,7 +3,7 @@ package org.example.project01lms.Services.BookService;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.example.project01lms.Converter.BookConverter;
-import org.example.project01lms.Dto.BooksDto;
+import org.example.project01lms.Dto.BookDto.BooksDto;
 import org.example.project01lms.ExceptionHandling.NotAvailableException;
 import org.example.project01lms.Mapper.BookMapper;
 import org.example.project01lms.Models.Book;
@@ -56,7 +56,7 @@ public class BookServiceImp implements BookService {
     }
 
     @Override
-    public List<BooksDto> findall() {
+    public List<BooksDto> findAll() {
         log.info("Listing the Books");
         List<Book> bookList = bookRepo.findAll();
         log.info("Book list fetched");
@@ -69,7 +69,7 @@ public class BookServiceImp implements BookService {
                 .orElseThrow(() -> new NotAvailableException(
                         "NOT_FOUND", "Book with id " + booksDto.getBooksId() + " not found"));
 
-        return bookConverter.toDto(book);
+        return bookMapper.toDto(book);
     }
 
     public BooksDto getByIsbnNo(String isbnNumber) {

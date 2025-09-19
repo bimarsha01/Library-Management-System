@@ -3,7 +3,7 @@ package org.example.project01lms.Controllers;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
-import org.example.project01lms.Dto.BooksDto;
+import org.example.project01lms.Dto.BookDto.BooksDto;
 import org.example.project01lms.Repo.CustomerRepo;
 import org.example.project01lms.Response.ApiResponse;
 import org.example.project01lms.Services.BookService.BookService;
@@ -91,7 +91,7 @@ public class BookController extends BaseController {
     @GetMapping("/find-all")
     public ResponseEntity<ApiResponse> findAll() {
         log.info("Fetching all the books");
-        List<BooksDto> booksDto = bookService.findall();
+        List<BooksDto> booksDto = bookService.findAll();
         if (booksDto != null) {
             log.info("Fetched successful");
             return ResponseEntity.ok(successResponse("Book fetched successfully", Boolean.TRUE, booksDto));

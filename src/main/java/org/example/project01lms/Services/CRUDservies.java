@@ -1,13 +1,15 @@
 package org.example.project01lms.Services;
 
+import org.example.project01lms.Dto.CustomerDto.CustomerUpdationDto;
+
 import java.util.List;
 
-public interface CRUDservies<DTO , ENTITY> {
-    DTO save(DTO dto);
+public interface CRUDservies<REQ, RES, ENTITY> {
+    RES save(REQ dto);
 
-    DTO update(DTO dto);
+    RES update(REQ dto);
 
-    List<DTO>  findall();
+    List<RES> findAll();
 
-    DTO findById(DTO dto);
+    RES findById(Long Id);
 }
