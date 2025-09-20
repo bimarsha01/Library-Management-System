@@ -3,6 +3,9 @@ package org.example.project01lms.Controllers;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.example.project01lms.Dto.BookDto.BookCreationDto;
+import org.example.project01lms.Dto.BookDto.BookResponseDto;
+import org.example.project01lms.Dto.BookDto.BookUpdationDto;
 import org.example.project01lms.Dto.BookDto.BooksDto;
 import org.example.project01lms.Repo.CustomerRepo;
 import org.example.project01lms.Response.ApiResponse;
@@ -36,15 +39,15 @@ public class BookController extends BaseController {
 
     @PostMapping("/add")
     @Transactional
-    public ResponseEntity<ApiResponse> saveBook( @Valid @RequestBody BooksDto booksDto) {
+    public ResponseEntity<ApiResponse> saveBook( @Valid @RequestBody BookCreationDto bookCreationDto) {
         log.info("Saving Book with details");
-        booksDto = bookService.save(booksDto);
-        if (booksDto != null) {
+        BookResponseDto bookResponseDto  = bookService.save(bookCreationDto);
+        if (bookResponseDto != null) {
             log.info("Book has been saved");
-            return ResponseEntity.ok(successResponse("Book saved successfully", Boolean.TRUE, booksDto));
+            return ResponseEntity.ok(successResponse("Book saved successfully", Boolean.TRUE, bookResponseDto));
         } else {
             log.error("Book creation failed");
-            return ResponseEntity.ok(successResponse("Book saved Failed", Boolean.FALSE, booksDto));
+            return ResponseEntity.ok(successResponse("Book saved Failed", Boolean.FALSE, bookResponseDto));
         }
     }
 
@@ -62,42 +65,44 @@ public class BookController extends BaseController {
         }
     }
 
-    @PostMapping("/update")
-    public ResponseEntity<ApiResponse> updateBook(@RequestBody BooksDto booksDto) {
+    @PostMapping("/update/{isbnNumber}")
+    public ResponseEntity<ApiResponse> updateBook(
+            @PathVariable String isbnNumber ,
+            @RequestBody BookUpdationDto bookUpdationDto) {
         log.info("Book update in progress");
-        booksDto = bookService.update(booksDto);
-        if (booksDto != null) {
+        BookResponseDto bookResponseDto = bookService.update(bookUpdationDto);
+        if (bookResponseDto != null) {
             log.info("Book updated Successfully");
-            return ResponseEntity.ok(successResponse("Book saved successfully", Boolean.TRUE, booksDto));
+            return ResponseEntity.ok(successResponse("Book saved successfully", Boolean.TRUE, bookResponseDto));
         } else {
             log.error("Book update failed");
-            return ResponseEntity.ok(successResponse("Book saved Failed", Boolean.FALSE, booksDto));
+            return ResponseEntity.ok(successResponse("Book saved Failed", Boolean.FALSE, null));
         }
     }
 
     @GetMapping("/get-by-isbnNumber/{isbnNumber}")
     public ResponseEntity<ApiResponse> getByIsbnNumber(@PathVariable String isbnNumber) {
         log.info("Getting the user info by Isbn number");
-        BooksDto booksDto = bookService.getByIsbnNo(isbnNumber);
-        if (booksDto != null) {
+       BookResponseDto bookResponseDto = bookService.getByIsbnNo(isbnNumber);
+        if (bookResponseDto != null) {
             log.info("Fetch using isbnNumber successful");
-            return ResponseEntity.ok(successResponse("Book fetched using ISBN number", Boolean.TRUE, booksDto));
+            return ResponseEntity.ok(successResponse("Book fetched using ISBN number", Boolean.TRUE, bookResponseDto));
         } else {
             log.error("Fetch failed");
-            return ResponseEntity.ok(successResponse("Book fetched using ISBN number failed", Boolean.FALSE, booksDto));
+            return ResponseEntity.ok(successResponse("Book fetched using ISBN number failed", Boolean.FALSE, null));
         }
     }
 
     @GetMapping("/find-all")
     public ResponseEntity<ApiResponse> findAll() {
         log.info("Fetching all the books");
-        List<BooksDto> booksDto = bookService.findAll();
-        if (booksDto != null) {
+        List<BookResponseDto> bookResponseDtos = bookService.findAll();
+        if (bookResponseDtos != null) {
             log.info("Fetched successful");
-            return ResponseEntity.ok(successResponse("Book fetched successfully", Boolean.TRUE, booksDto));
+            return ResponseEntity.ok(successResponse("Book fetched successfully", Boolean.TRUE, bookResponseDtos));
         } else {
             log.error("Fetch Failed");
-            return ResponseEntity.ok(successResponse("Book fetch Failed", Boolean.FALSE, booksDto));
+            return ResponseEntity.ok(successResponse("Book fetch Failed", Boolean.FALSE, null));
         }
     }
 }

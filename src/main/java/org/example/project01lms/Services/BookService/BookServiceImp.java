@@ -3,7 +3,11 @@ package org.example.project01lms.Services.BookService;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.example.project01lms.Converter.BookConverter;
+import org.example.project01lms.Dto.BookDto.BookCreationDto;
+import org.example.project01lms.Dto.BookDto.BookResponseDto;
+import org.example.project01lms.Dto.BookDto.BookUpdationDto;
 import org.example.project01lms.Dto.BookDto.BooksDto;
+import org.example.project01lms.Dto.LoanDto.LoanUpdationDto;
 import org.example.project01lms.ExceptionHandling.NotAvailableException;
 import org.example.project01lms.Mapper.BookMapper;
 import org.example.project01lms.Models.Book;
@@ -34,29 +38,34 @@ public class BookServiceImp implements BookService {
     }
 
     @Override
-    public BooksDto save(BooksDto booksDto) {
+    public BookResponseDto save(BookCreationDto bookCreationDto) {
         log.info("Creating book");
-        Book book = bookConverter.toEntity(booksDto);
+        Book book = bookMapper.toEntity(bookCreationDto);
         book = bookRepo.save(book);
         log.info("Book added successfully with isbnNumber {} " , book.getIsbnNumber());
         return bookMapper.toDto(book);
     }
 
+    @Override
+    public BookResponseDto update(LoanUpdationDto dto) {
+        return null;
+    }
+
     @Transactional
     @Override
-    public BooksDto update(BooksDto booksDto) {
+    public BookResponseDto update( String isbnNumber , BookUpdationDto bookUpdationDto) {
         log.info("Updating Book details");
-        Book book = bookRepo.findByIsbnNumber(booksDto.getIsbnNumber())
-                .orElseThrow(() -> new NotAvailableException("NOT_AVAILABLE", "Book with isbnNumber" + booksDto.getIsbnNumber() + " is not available"));
+        Book book = bookRepo.findByIsbnNumber(isbnNumber)
+                .orElseThrow(() -> new NotAvailableException("NOT_AVAILABLE", "Book with isbnNumber" + isbnNumber + " is not available"));
 
-        bookMapper.updateBookFromDto(booksDto, book);
+        bookMapper.updateBookFromDto(bookUpdationDto, book);
         bookRepo.save(book);
-        log.info("Book details had been updated of {}" , booksDto.getIsbnNumber());
+        log.info("Book details had been updated of {}" ,isbnNumber);
         return bookMapper.toDto(book);
     }
 
     @Override
-    public List<BooksDto> findAll() {
+    public List<BookResponseDto> findAll() {
         log.info("Listing the Books");
         List<Book> bookList = bookRepo.findAll();
         log.info("Book list fetched");
@@ -64,15 +73,11 @@ public class BookServiceImp implements BookService {
     }
 
     @Override
-    public BooksDto findById(BooksDto booksDto) {
-        Book book = bookRepo.findById(booksDto.getBooksId())
-                .orElseThrow(() -> new NotAvailableException(
-                        "NOT_FOUND", "Book with id " + booksDto.getBooksId() + " not found"));
-
-        return bookMapper.toDto(book);
+    public BookResponseDto findById(Long Id) {
+        return null;
     }
 
-    public BooksDto getByIsbnNo(String isbnNumber) {
+    public BookResponseDto getByIsbnNo(String isbnNumber) {
         Book book = bookRepo.findByIsbnNumber(isbnNumber)
                 .orElseThrow(() -> new RuntimeException("Customer not found"));
         return bookMapper.toDto(book);

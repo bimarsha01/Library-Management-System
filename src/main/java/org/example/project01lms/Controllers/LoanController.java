@@ -2,7 +2,10 @@ package org.example.project01lms.Controllers;
 
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
+import org.example.project01lms.Dto.LoanDto.LoanCreationDto;
 import org.example.project01lms.Dto.LoanDto.LoanDto;
+import org.example.project01lms.Dto.LoanDto.LoanResponseDto;
+import org.example.project01lms.Dto.LoanDto.LoanUpdationDto;
 import org.example.project01lms.Response.ApiResponse;
 import org.example.project01lms.Services.LoanService.LoanService;
 import org.springframework.http.ResponseEntity;
@@ -21,22 +24,24 @@ public class LoanController extends BaseController {
 
     @PostMapping("/get")
     @Transactional
-    public ResponseEntity<ApiResponse> setLoanForCustomer(@RequestBody LoanDto loanDto){
+    public ResponseEntity<ApiResponse> setLoanForCustomer(@RequestBody LoanCreationDto loanCreationDto) {
         log.info("Setting a loan for customer");
-        try {
-            loanDto = loanService.save(loanDto);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        if(loanDto != null){
-            log.info("Loan has been set for customer {}" , loanDto.getLibraryId());
-            return ResponseEntity.ok(successResponse("Customer created Successfully" , Boolean.TRUE , loanDto));
-        }
-        else{
+
+        LoanResponseDto loanResponseDto = loanService.save(loanCreationDto);
+
+        if (loanResponseDto != null) {
+            log.info("Loan has been set for customer {}", loanResponseDto.());
+            return ResponseEntity.ok(
+                    successResponse("Loan created successfully", Boolean.TRUE, loanResponseDto)
+            );
+        } else {
             log.info("Loan was not approved");
-            return ResponseEntity.ok(successResponse("Customer creation Failed" , Boolean.FALSE , loanDto));
+            return ResponseEntity.ok(
+                    successResponse("Loan creation failed", Boolean.FALSE, null)
+            );
         }
     }
+
 
     @Transactional
     @PostMapping("/book/return")
@@ -50,16 +55,30 @@ public class LoanController extends BaseController {
         }
     }
 
-    @GetMapping("/find-by-lid")
-    public ResponseEntity<ApiResponse> findById(@RequestBody LoanDto loanDto){
-       loanDto =  loanService.findById(loanDto);
-        if(loanDto != null){
-            return ResponseEntity.ok(successResponse(" Customer Returned " , Boolean.TRUE , loanDto));
+    @GetMapping("/find-by-lid/{libraryId}")
+    public ResponseEntity<ApiResponse> findByLId(@PathVariable String libraryId){
+       LoanResponseDto loanResponseDto =  loanService.findByLId(libraryId);
+        if(loanResponseDto != null){
+            return ResponseEntity.ok(successResponse(" Customer Returned " , Boolean.TRUE , loanResponseDto));
         }
         else{
-            return ResponseEntity.ok(successResponse("Customer Returned Failed" , Boolean.FALSE , loanDto));
+            return ResponseEntity.ok(successResponse("Customer Returned Failed" , Boolean.FALSE , null));
         }
     }
-
+    @GetMapping("/update/{libraryId}")
+    public ResponseEntity<ApiResponse> update(
+            @PathVariable String libraryId ,
+            @RequestBody LoanUpdationDto loanUpdationDto
+            ){
+        LoanResponseDto loanResponseDto = loanService.update(loanUpdationDto);
+        if( loanResponseDto != null){
+            log.info("Loan has been set for customer {}" ,libraryId);
+            return ResponseEntity.ok(successResponse("Customer created Successfully" , Boolean.TRUE , loanResponseDto));
+        }
+        else{
+            log.info("Loan was not approved");
+            return ResponseEntity.ok(successResponse("Customer creation Failed" , Boolean.FALSE , null));
+        }
+    }
 
 }

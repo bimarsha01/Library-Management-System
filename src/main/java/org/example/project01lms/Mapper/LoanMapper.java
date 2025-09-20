@@ -1,6 +1,9 @@
 package org.example.project01lms.Mapper;
 
+import org.example.project01lms.Dto.LoanDto.LoanCreationDto;
 import org.example.project01lms.Dto.LoanDto.LoanDto;
+import org.example.project01lms.Dto.LoanDto.LoanResponseDto;
+import org.example.project01lms.Dto.LoanDto.LoanUpdationDto;
 import org.example.project01lms.Models.Loan;
 import org.mapstruct.*;
 
@@ -11,14 +14,14 @@ import java.util.List;
 public interface LoanMapper {
 
     @Mapping(target = "id", ignore = true)
-    Loan toEntity(LoanDto dto);
+    Loan toEntity(LoanCreationDto loanCreationDto);
 
-    LoanDto toDto(Loan loan);
+    LoanResponseDto toDto(Loan loan);
 
-    List<LoanDto> toDtoList(List<Loan> loanList);
+    List<LoanResponseDto> toDtoList(List<Loan> loanList);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    void updateLoanFromDto(LoanDto dto, @MappingTarget Loan loan);
+    void updateLoanFromDto(LoanUpdationDto dto, @MappingTarget Loan loan);
 
 
 

@@ -4,9 +4,9 @@ import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.example.project01lms.Converter.CustomerConverter;
 import org.example.project01lms.Dto.CustomerDto.CustomerCreationDto;
-import org.example.project01lms.Dto.CustomerDto.CustomerDto;
 import org.example.project01lms.Dto.CustomerDto.CustomerResponseDto;
 import org.example.project01lms.Dto.CustomerDto.CustomerUpdationDto;
+import org.example.project01lms.Dto.LoanDto.LoanUpdationDto;
 import org.example.project01lms.ExceptionHandling.HandleDataException;
 import org.example.project01lms.ExceptionHandling.NotAvailableException;
 import org.example.project01lms.Helper.Validation;
@@ -49,7 +49,7 @@ public class CustomerServiceImp implements CustomerService {
     }
 
     @Override
-    public CustomerResponseDto update(CustomerCreationDto customerDto) {
+    public CustomerResponseDto update(LoanUpdationDto customerDto) {
         throw new UnsupportedOperationException("Use updateCustomer() instead of update()");
     }
 

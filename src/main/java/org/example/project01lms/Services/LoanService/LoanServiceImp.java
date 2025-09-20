@@ -2,7 +2,10 @@ package org.example.project01lms.Services.LoanService;
 
 import lombok.extern.slf4j.Slf4j;
 import org.example.project01lms.Converter.LoanConverter;
+import org.example.project01lms.Dto.LoanDto.LoanCreationDto;
 import org.example.project01lms.Dto.LoanDto.LoanDto;
+import org.example.project01lms.Dto.LoanDto.LoanResponseDto;
+import org.example.project01lms.Dto.LoanDto.LoanUpdationDto;
 import org.example.project01lms.ExceptionHandling.NotFoundException;
 import org.example.project01lms.Helper.Update;
 import org.example.project01lms.Helper.Validation;
@@ -55,22 +58,21 @@ public class LoanServiceImp implements LoanService {
 
 
     @Override
-    public LoanDto save(LoanDto loanDto) {
-        Loan loan = loanMapper.toEntity(loanDto);
+    public LoanResponseDto save(LoanCreationDto loanCreationDto) {
+        Loan loan = loanMapper.toEntity(loanCreationDto);
         loan = loanRepo.save(loan);
-        loanDto = loanMapper.toDto(loan);
-        return loanDto;
+        return loanMapper.toDto(loan);
     }
 
-    @Override
-    public LoanDto update(LoanDto loanDto) {
 
-        Loan loan = (Loan)loanRepo.findByCustomers_libraryId(loanDto.getLibraryId())
+    @Override
+    public LoanResponseDto update(String libraryId, LoanUpdationDto loanUpdationDto) {
+        Loan loan = (Loan)loanRepo.findByCustomers_libraryId(libraryId)
                 .orElseThrow(() -> new NotFoundException("NOT_FOUND" , "the library id you are looking is not found or is not in the database"));
-        log.info("Loan is being updated for customer with Library id : {} " , loanDto.getLibraryId());
-        loanMapper.updateLoanFromDto(loanDto ,  loan);
+        log.info("Loan is being updated for customer with Library id : {} " , libraryId);
+        loanMapper.updateLoanFromDto(loanUpdationDto ,  loan);
         loanRepo.save(loan);
-        log.info("Loan has been updated successfully for the customer : {}" , loanDto.getLibraryId());
+        log.info("Loan has been updated successfully for the customer : {}" ,libraryId);
        return  loanMapper.toDto(loan);
     }
 
@@ -78,6 +80,11 @@ public class LoanServiceImp implements LoanService {
     public List<LoanDto> findAll() {
        List<Loan> loanList = loanRepo.findAll();
        return loanMapper.toDtoList(loanList);
+    }
+
+    @Override
+    public LoanResponseDto findById(Long Id) {
+        return null;
     }
 
     @Override
