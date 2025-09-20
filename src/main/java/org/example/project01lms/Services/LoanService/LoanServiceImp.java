@@ -41,20 +41,19 @@ public class LoanServiceImp implements LoanService {
         this.loanMapper = loanMapper;
     }
 
-    @Override
-    public LoanDto returnBook(LoanDto loanDto) {
-        LoanDto finalLoanDto = loanDto;
-        Loan loan = loanRepo.findByCustomers_libraryIdAndBook_isbnNumber(
-                loanDto.getLibraryId(),
-                loanDto.getIsbnNumber()
-        ).orElseThrow(() -> new NotFoundException("NOT_FOUND" , "The user with library id " + finalLoanDto.getLibraryId() + " with isbn Number "+ finalLoanDto.getIsbnNumber() + "is not found"));
-
-        validation.validateOnReturn(loan);
-        update.updateOnReturn(loan);
-       loan = loanRepo.save(loan);
-       loanDto = loanMapper.toDto(loan);
-        return loanDto;
-    }
+//    @Override
+//    public LoanResponseDto returnBook(LoanDto loanDto) {
+//        LoanDto finalLoanDto = loanDto;
+//        Loan loan = loanRepo.findByCustomers_libraryIdAndBook_isbnNumber(
+//                loanDto.getLibraryId(),
+//                loanDto.getIsbnNumber()
+//        ).orElseThrow(() -> new NotFoundException("NOT_FOUND" , "The user with library id " + finalLoanDto.getLibraryId() + " with isbn Number "+ finalLoanDto.getIsbnNumber() + "is not found"));
+//
+//        validation.validateOnReturn(loan);
+//        update.updateOnReturn(loan);
+//       loan = loanRepo.save(loan);
+//        return loanDto;
+//    }
 
 
     @Override
