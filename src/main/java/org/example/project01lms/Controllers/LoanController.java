@@ -30,7 +30,7 @@ public class LoanController extends BaseController {
         LoanResponseDto loanResponseDto = loanService.save(loanCreationDto);
 
         if (loanResponseDto != null) {
-            log.info("Loan has been set for customer {}", loanResponseDto.());
+            log.info("Loan has been set for customer {}", loanResponseDto);
             return ResponseEntity.ok(
                     successResponse("Loan created successfully", Boolean.TRUE, loanResponseDto)
             );
@@ -45,19 +45,31 @@ public class LoanController extends BaseController {
 
     @Transactional
     @PostMapping("/book/return")
-    public ResponseEntity<ApiResponse> returnBook(@RequestBody LoanDto loanDto){
-        loanDto = loanService.returnBook(loanDto);
-        if(loanDto != null){
-            return ResponseEntity.ok(successResponse(" Customer Returned " , Boolean.TRUE , loanDto));
+    public ResponseEntity<ApiResponse> returnBook(
+            @RequestParam String libraryId,
+            @RequestParam String isbnNummber){
+        LoanResponseDto loanResponseDto = loanService.returnBook(libraryId , isbnNummber);
+        if(loanResponseDto != null){
+            return ResponseEntity.ok(successResponse(" Customer Returned " , Boolean.TRUE , loanResponseDto));
         }
         else{
-            return ResponseEntity.ok(successResponse("Customer Returned Failed" , Boolean.FALSE , loanDto));
+            return ResponseEntity.ok(successResponse("Customer Returned Failed" , Boolean.FALSE , null));
         }
     }
 
     @GetMapping("/find-by-lid/{libraryId}")
     public ResponseEntity<ApiResponse> findByLId(@PathVariable String libraryId){
        LoanResponseDto loanResponseDto =  loanService.findByLId(libraryId);
+        if(loanResponseDto != null){
+            return ResponseEntity.ok(successResponse(" Customer Returned " , Boolean.TRUE , loanResponseDto));
+        }
+        else{
+            return ResponseEntity.ok(successResponse("Customer Returned Failed" , Boolean.FALSE , null));
+        }
+
+    }@GetMapping("/find-by-id/{Id}")
+    public ResponseEntity<ApiResponse> findById(@PathVariable Long Id){
+       LoanResponseDto loanResponseDto =  loanService.findById(Id);
         if(loanResponseDto != null){
             return ResponseEntity.ok(successResponse(" Customer Returned " , Boolean.TRUE , loanResponseDto));
         }

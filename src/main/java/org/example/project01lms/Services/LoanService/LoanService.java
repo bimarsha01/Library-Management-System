@@ -9,9 +9,12 @@ import org.example.project01lms.Services.CRUDservies;
 
 public interface LoanService extends CRUDservies<LoanCreationDto , LoanResponseDto, Loan> {
 
-LoanDto returnBook(LoanDto loanDto);
+LoanResponseDto returnBook(String libraryId , String isbnNumber);
 
-LoanResponseDto update(String libraryId, LoanUpdationDto loanUpdationDto);
+    LoanResponseDto update(String libraryId, LoanUpdationDto loanUpdationDto);
 
 LoanResponseDto findByLId(String libraryId);
+
+    LoanResponseDto findById(Long id);
+
 }

@@ -7,6 +7,7 @@ import org.example.project01lms.Models.Loan;
 import org.mapstruct.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @Mapper(componentModel = "spring")
 public interface LoanMapper {
@@ -16,7 +17,7 @@ public interface LoanMapper {
 
     @Mapping(source = "id", target = "loanId")
     @Mapping(source = "customer.id", target = "customerId")
-    LoanResponseDto toDto(Loan loan);
+    LoanResponseDto toDto(Optional<Loan> loan);
 
     List<LoanResponseDto> toDtoList(List<Loan> loanList);
 

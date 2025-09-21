@@ -17,6 +17,7 @@ import org.example.project01lms.Repo.LoanRepo;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -41,26 +42,28 @@ public class LoanServiceImp implements LoanService {
         this.loanMapper = loanMapper;
     }
 
-//    @Override
-//    public LoanResponseDto returnBook(LoanDto loanDto) {
-//        LoanDto finalLoanDto = loanDto;
-//        Loan loan = loanRepo.findByCustomers_libraryIdAndBook_isbnNumber(
-//                loanDto.getLibraryId(),
-//                loanDto.getIsbnNumber()
-//        ).orElseThrow(() -> new NotFoundException("NOT_FOUND" , "The user with library id " + finalLoanDto.getLibraryId() + " with isbn Number "+ finalLoanDto.getIsbnNumber() + "is not found"));
-//
-//        validation.validateOnReturn(loan);
-//        update.updateOnReturn(loan);
-//       loan = loanRepo.save(loan);
-//        return loanDto;
-//    }
+    @Override
+    public LoanResponseDto returnBook(String libraryId , String isbnNumber) {
+        Loan loan = loanRepo.findByCustomers_libraryIdAndBook_isbnNumber(
+                libraryId, isbnNumber
+        ).orElseThrow(() -> new NotFoundException("NOT_FOUND" , "The user with library id " +libraryId+ " with isbn Number "+ isbnNumber + "is not found"));
+        validation.validateOnReturn(loan);
+        update.updateOnReturn(loan);
+        loanRepo.save(loan);
+        return loanMapper.toDto(Optional.of(loan));
+    }
 
 
     @Override
     public LoanResponseDto save(LoanCreationDto loanCreationDto) {
         Loan loan = loanMapper.toEntity(loanCreationDto);
         loan = loanRepo.save(loan);
-        return loanMapper.toDto(loan);
+        return loanMapper.toDto(Optional.of(loan));
+    }
+
+    @Override
+    public LoanResponseDto update(LoanUpdationDto dto) {
+        return null;
     }
 
 
@@ -72,25 +75,29 @@ public class LoanServiceImp implements LoanService {
         loanMapper.updateLoanFromDto(loanUpdationDto ,  loan);
         loanRepo.save(loan);
         log.info("Loan has been updated successfully for the customer : {}" ,libraryId);
-       return  loanMapper.toDto(loan);
+       return  loanMapper.toDto(Optional.of(loan));
     }
 
     @Override
-    public List<LoanDto> findAll() {
+    public List<LoanResponseDto> findAll() {
        List<Loan> loanList = loanRepo.findAll();
        return loanMapper.toDtoList(loanList);
     }
 
     @Override
-    public LoanResponseDto findById(Long Id) {
-        return null;
+    public LoanResponseDto findById(Long id) {
+        log.info("Finding the details of the customer with the given library id : {}" ,id);
+    Loan loan =loanRepo.findById(id)
+            .orElseThrow(() -> new NotFoundException("NOT_FOUND", "Loan with id " +id+ "not found"));
+    return loanMapper.toDto(Optional.ofNullable(loan));
     }
+    public LoanResponseDto findByLId(String libraryId){
+        log.info("Finding the loan using libraryId {}" , libraryId);
+        Loan loan = (Loan) loanRepo.findByCustomers_libraryId(libraryId)
+                .orElseThrow(()-> new NotFoundException("LOAN_NOT_FOUND" , "There is no loan under this libraryId"));
+        return loanMapper.toDto(Optional.ofNullable(loan));
 
-    @Override
-    public LoanDto findById(LoanDto loanDto) {
-        log.info("Finding the details of the customer with the given library id : {}" , loanDto.getLibraryId());
-    Loan loan = (Loan) loanRepo.findByCustomers_libraryId(loanDto.getLibraryId())
-            .orElseThrow(() -> new NotFoundException("NOT_FOUND", "Loan with id " + loanDto.getLibraryId() + "not found"));
-    return loanMapper.toDto(loan);
     }
 }
+
+

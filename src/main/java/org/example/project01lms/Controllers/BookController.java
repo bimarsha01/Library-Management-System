@@ -70,7 +70,7 @@ public class BookController extends BaseController {
             @PathVariable String isbnNumber ,
             @RequestBody BookUpdationDto bookUpdationDto) {
         log.info("Book update in progress");
-        BookResponseDto bookResponseDto = bookService.update(bookUpdationDto);
+        BookResponseDto bookResponseDto = bookService.update(isbnNumber , bookUpdationDto);
         if (bookResponseDto != null) {
             log.info("Book updated Successfully");
             return ResponseEntity.ok(successResponse("Book saved successfully", Boolean.TRUE, bookResponseDto));
