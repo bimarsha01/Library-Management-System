@@ -17,7 +17,7 @@ public interface LoanMapper {
 
     @Mapping(source = "id", target = "loanId")
     @Mapping(source = "customer.id", target = "customerId")
-    LoanResponseDto toDto(Optional<Loan> loan);
+    LoanResponseDto toDto(Loan loan);
 
     List<LoanResponseDto> toDtoList(List<Loan> loanList);
 

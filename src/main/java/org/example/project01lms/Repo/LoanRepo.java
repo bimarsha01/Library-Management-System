@@ -26,7 +26,7 @@ public interface LoanRepo extends JpaRepository<Loan, Long> {
 
     int countByCustomers_LibraryIdAndBook_IsbnNumber(String customers_libraryId, String book_isbnNumber);
 
-    Optional<Object> findByCustomers_libraryId(String libraryId);
+    Optional<Loan> findByCustomers_libraryId(String libraryId);
 
     List<Loan> id(Long id);
 }
