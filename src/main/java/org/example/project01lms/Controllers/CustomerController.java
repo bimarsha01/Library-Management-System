@@ -2,9 +2,7 @@ package org.example.project01lms.Controllers;
 
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
-import org.example.project01lms.Converter.CustomerConverter;
 import org.example.project01lms.Dto.CustomerDto.CustomerCreationDto;
-import org.example.project01lms.Dto.CustomerDto.CustomerDto;
 import org.example.project01lms.Dto.CustomerDto.CustomerResponseDto;
 import org.example.project01lms.Dto.CustomerDto.CustomerUpdationDto;
 import org.example.project01lms.Repo.CustomerRepo;
@@ -21,12 +19,10 @@ public class CustomerController  extends BaseController{
 
     public final CustomerService customerService;
     private final CustomerRepo customerRepo;
-    private  final CustomerConverter customerConverter;
 
-    public CustomerController(CustomerService customerService, CustomerRepo customerRepo, CustomerConverter customerConverter) {
+    public CustomerController(CustomerService customerService, CustomerRepo customerRepo) {
         this.customerService = customerService;
         this.customerRepo = customerRepo;
-        this.customerConverter = customerConverter;
     }
 
 

@@ -51,19 +51,19 @@ public class BookController extends BaseController {
         }
     }
 
-    @PostMapping("/upload")
-    public ResponseEntity<String> uploadExcelFile(@RequestParam("file") MultipartFile file) {
-        try {
-            log.info("Book uploading in process");
-            bookServiceImp.saveFromExcel(file);
-            log.error("Book upload successful");
-            return ResponseEntity.ok("file uploaded successfully");
-        } catch (Exception e) {
-            log.error("Book upload Failed");
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Failed to upload Excel: " + e.getMessage());
-        }
-    }
+//    @PostMapping("/upload")
+//    public ResponseEntity<String> uploadExcelFile(@RequestParam("file") MultipartFile file) {
+//        try {
+//            log.info("Book uploading in process");
+//            bookServiceImp.saveFromExcel(file);
+//            log.error("Book upload successful");
+//            return ResponseEntity.ok("file uploaded successfully");
+//        } catch (Exception e) {
+//            log.error("Book upload Failed");
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+//                    .body("Failed to upload Excel: " + e.getMessage());
+//        }
+//    }
 
     @PostMapping("/update/{isbnNumber}")
     public ResponseEntity<ApiResponse> updateBook(

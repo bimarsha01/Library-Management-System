@@ -9,9 +9,10 @@ import org.mapstruct.*;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
+
 public interface BookMapper {
-    @Mapping(target = "id", ignore = true)
+//    @Mapping(target = "bookId", ignore = true)
     Book toEntity(BookCreationDto dto);
 
     BookResponseDto toDto(Book book);

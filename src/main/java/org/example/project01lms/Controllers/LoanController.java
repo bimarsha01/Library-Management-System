@@ -3,7 +3,6 @@ package org.example.project01lms.Controllers;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.example.project01lms.Dto.LoanDto.LoanCreationDto;
-import org.example.project01lms.Dto.LoanDto.LoanDto;
 import org.example.project01lms.Dto.LoanDto.LoanResponseDto;
 import org.example.project01lms.Dto.LoanDto.LoanUpdationDto;
 import org.example.project01lms.Response.ApiResponse;

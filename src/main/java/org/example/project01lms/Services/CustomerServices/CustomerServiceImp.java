@@ -2,7 +2,6 @@ package org.example.project01lms.Services.CustomerServices;
 
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
-import org.example.project01lms.Converter.CustomerConverter;
 import org.example.project01lms.Dto.CustomerDto.CustomerCreationDto;
 import org.example.project01lms.Dto.CustomerDto.CustomerResponseDto;
 import org.example.project01lms.Dto.CustomerDto.CustomerUpdationDto;
@@ -22,13 +21,11 @@ import java.util.List;
 @Slf4j
 public class CustomerServiceImp implements CustomerService {
 
-    private final CustomerConverter customerConverter;
     private final CustomerRepo customerRepo;
     private final CustomerMapper customerMapper;
     private final Validation validation;
 
-    public CustomerServiceImp(CustomerConverter customerConverter, CustomerRepo customerRepo, CustomerMapper customerMapper, Validation validation) {
-        this.customerConverter = customerConverter;
+    public CustomerServiceImp( CustomerRepo customerRepo, CustomerMapper customerMapper, Validation validation) {
         this.customerRepo = customerRepo;
         this.customerMapper = customerMapper;
         this.validation = validation;
@@ -87,9 +84,10 @@ public class CustomerServiceImp implements CustomerService {
         return responseDto;
     }
 
+
     @Override
-    public CustomerResponseDto removeCustomer(CustomerResponseDto customerResponseDto) {
-        Customers customers = customerRepo.findByLibraryId(customerResponseDto.getLibraryId())
+    public CustomerResponseDto removeCustomer(String libraryId) {
+        Customers customers = customerRepo.findByLibraryId(libraryId)
                 .orElseThrow(() -> new RuntimeException("There is no customer with the given Library id"));
 
         customerRepo.delete(customers);

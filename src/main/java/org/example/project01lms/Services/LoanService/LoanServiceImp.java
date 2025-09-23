@@ -1,7 +1,6 @@
 package org.example.project01lms.Services.LoanService;
 
 import lombok.extern.slf4j.Slf4j;
-import org.example.project01lms.Converter.LoanConverter;
 import org.example.project01lms.Dto.LoanDto.LoanCreationDto;
 import org.example.project01lms.Dto.LoanDto.LoanResponseDto;
 import org.example.project01lms.Dto.LoanDto.LoanUpdationDto;
@@ -24,21 +23,18 @@ public class LoanServiceImp implements LoanService {
     private final CustomerRepo customerRepo;
     private final BookRepo bookRepo;
     private final LoanRepo loanRepo;
-    private final LoanConverter loanConverter;
     private final Validation validation;
     private final Update update;
     private final LoanMapper loanMapper;
 
     public LoanServiceImp(CustomerRepo customerRepo,
                           BookRepo bookRepo,
-                          LoanConverter loanConverter,
                           LoanRepo loanRepo,
                           Validation validation,
                           Update update,
                           LoanMapper loanMapper) {
         this.customerRepo = customerRepo;
         this.bookRepo = bookRepo;
-        this.loanConverter = loanConverter;
         this.loanRepo = loanRepo;
         this.validation = validation;
         this.update = update;

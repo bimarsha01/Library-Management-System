@@ -31,7 +31,7 @@ public class BookCreationDto {
     private String authorName;
 
     @NotNull(message = FieldErrorConstant.NOT_NULL)
-    private Long BookQuantity;
+    private Long bookQuantity;
 
     @NotNull(message = FieldErrorConstant.NOT_NULL)
     private Long availableCopies;
@@ -42,3 +42,7 @@ public class BookCreationDto {
     @NotBlank(message = FieldErrorConstant.NOT_BLANK)
     private String language;
 }
+
+
+
+//something is going wrong her with this code and needs to be rechecked.

@@ -9,14 +9,14 @@ import org.mapstruct.*;
 import java.util.List;
 import java.util.Optional;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
+
 public interface LoanMapper {
 
-    @Mapping(target = "id", ignore = true)
+//    @Mapping(target = "id", ignore = true)
     Loan toEntity(LoanCreationDto loanCreationDto);
 
-    @Mapping(source = "id", target = "loanId")
-    @Mapping(source = "customer.id", target = "customerId")
+//    @Mapping(source = "id", target = "loanId")
     LoanResponseDto toDto(Loan loan);
 
     List<LoanResponseDto> toDtoList(List<Loan> loanList);

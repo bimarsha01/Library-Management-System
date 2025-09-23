@@ -2,7 +2,6 @@ package org.example.project01lms.Services.BookService;
 
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
-import org.example.project01lms.Converter.BookConverter;
 import org.example.project01lms.Dto.BookDto.BookCreationDto;
 import org.example.project01lms.Dto.BookDto.BookResponseDto;
 import org.example.project01lms.Dto.BookDto.BookUpdationDto;
@@ -27,12 +26,11 @@ import static com.poiji.bind.Poiji.fromExcel;
 public class BookServiceImp implements BookService {
 
 
-    public BookConverter bookConverter;
+
     public BookRepo bookRepo;
     private BookMapper bookMapper;
 
-    public BookServiceImp(BookConverter bookConverter, BookRepo bookRepo, BookMapper bookMapper) {
-        this.bookConverter = bookConverter;
+    public BookServiceImp( BookRepo bookRepo, BookMapper bookMapper) {
         this.bookRepo = bookRepo;
         this.bookMapper = bookMapper;
     }
@@ -83,23 +81,23 @@ public class BookServiceImp implements BookService {
         return bookMapper.toDto(book);
     }
 
-    public void saveFromExcel(MultipartFile file) {
-        try {
-            File tempfile = File.createTempFile("books_data", ".xlsx");
-            file.transferTo(tempfile);
-
-            List<ExcelFile> excelBooks = fromExcel(tempfile, ExcelFile.class);
-            for (ExcelFile excelBook : excelBooks) {
-                BooksDto dto = getBooksDto(excelBook);
-
-                Book bookentity = bookConverter.toEntity(dto);
-                bookRepo.save(bookentity);
-            }
-            tempfile.delete();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
+//    public void saveFromExcel(MultipartFile file) {
+//        try {
+//            File tempfile = File.createTempFile("books_data", ".xlsx");
+//            file.transferTo(tempfile);
+//
+//            List<ExcelFile> excelBooks = fromExcel(tempfile, ExcelFile.class);
+//            for (ExcelFile excelBook : excelBooks) {
+//                BooksDto dto = getBooksDto(excelBook);
+//
+//                Book bookentity = bookConverter.toEntity(dto);
+//                bookRepo.save(bookentity);
+//            }
+//            tempfile.delete();
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
 
     private static BooksDto getBooksDto(ExcelFile excelBook) {
         BooksDto dto = new BooksDto();
