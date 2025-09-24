@@ -12,7 +12,7 @@ LoanResponseDto returnBook(String libraryId , String isbnNumber);
 
     LoanResponseDto update(String libraryId, LoanUpdationDto loanUpdationDto);
 
-LoanResponseDto findByLId(String libraryId);
+LoanResponseDto findByLibraryId(String libraryId);
 
     LoanResponseDto findById(Long id);
 

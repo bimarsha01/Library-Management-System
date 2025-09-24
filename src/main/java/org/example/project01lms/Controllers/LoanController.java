@@ -57,8 +57,8 @@ public class LoanController extends BaseController {
     }
 
     @GetMapping("/find-by-lid/{libraryId}")
-    public ResponseEntity<ApiResponse> findByLId(@PathVariable String libraryId){
-       LoanResponseDto loanResponseDto =  loanService.findByLId(libraryId);
+    public ResponseEntity<ApiResponse> findByLibraryId(@PathVariable String libraryId){
+       LoanResponseDto loanResponseDto =  loanService.findByLibraryId(libraryId);
         if(loanResponseDto != null){
             return ResponseEntity.ok(successResponse(" Customer Returned " , Boolean.TRUE , loanResponseDto));
         }
