@@ -23,14 +23,13 @@ import static com.poiji.bind.Poiji.fromExcel;
 
 @Service
 @Slf4j
-public class BookServiceImp implements BookService {
+@Transactional
+public class BookServiceImpl implements BookService {
 
+    private final BookRepo bookRepo;
+    private final BookMapper bookMapper;
 
-
-    public BookRepo bookRepo;
-    private BookMapper bookMapper;
-
-    public BookServiceImp( BookRepo bookRepo, BookMapper bookMapper) {
+    public BookServiceImpl(BookRepo bookRepo, BookMapper bookMapper) {
         this.bookRepo = bookRepo;
         this.bookMapper = bookMapper;
     }
@@ -40,7 +39,7 @@ public class BookServiceImp implements BookService {
         log.info("Creating book");
         Book book = bookMapper.toEntity(bookCreationDto);
         book = bookRepo.save(book);
-        log.info("Book added successfully with isbnNumber {} " , book.getIsbnNumber());
+        log.info("Book added successfully with isbnNumber {}", book.getIsbnNumber());
         return bookMapper.toDto(book);
     }
 
@@ -49,39 +48,58 @@ public class BookServiceImp implements BookService {
         return null;
     }
 
-    @Transactional
     @Override
-    public BookResponseDto update( String isbnNumber , BookUpdationDto bookUpdationDto) {
-        log.info("Updating Book details");
+    public BookResponseDto update(String isbnNumber, BookUpdationDto bookUpdationDto) {
+        log.info("Updating book details for isbnNumber {}", isbnNumber);
         Book book = bookRepo.findByIsbnNumber(isbnNumber)
-                .orElseThrow(() -> new NotAvailableException("NOT_AVAILABLE", "Book with isbnNumber" + isbnNumber + " is not available"));
+                .orElseThrow(() -> new NotAvailableException("NOT_AVAILABLE", "Book with isbnNumber " + isbnNumber + " is not available"));
 
         bookMapper.updateBookFromDto(bookUpdationDto, book);
         bookRepo.save(book);
-        log.info("Book details had been updated of {}" ,isbnNumber);
+        log.info("Book details updated successfully for isbnNumber {}", isbnNumber);
         return bookMapper.toDto(book);
     }
 
     @Override
     public List<BookResponseDto> findAll() {
-        log.info("Listing the Books");
+        log.info("Fetching all books");
         List<Book> bookList = bookRepo.findAll();
-        log.info("Book list fetched");
+        log.info("Fetched {} books", bookList.size());
         return bookMapper.toDtoList(bookList);
     }
 
     @Override
-    public BookResponseDto findById(Long Id) {
-        return null;
-    }
-
-    public BookResponseDto getByIsbnNo(String isbnNumber) {
-        Book book = bookRepo.findByIsbnNumber(isbnNumber)
-                .orElseThrow(() -> new RuntimeException("Customer not found"));
+    public BookResponseDto findById(Long id) {
+        log.info("Fetching book with id {}", id);
+        Book book = bookRepo.findById(id)
+                .orElseThrow(() -> new NotAvailableException("NOT_AVAILABLE", "Book with id " + id + " is not available"));
         return bookMapper.toDto(book);
     }
 
-//    public void saveFromExcel(MultipartFile file) {
+    @Override
+    public BookResponseDto getByIsbnNo(String isbnNumber) {
+        log.info("Fetching book with isbnNumber {}", isbnNumber);
+        Book book = bookRepo.findByIsbnNumber(isbnNumber)
+                .orElseThrow(() -> new NotAvailableException("NOT_AVAILABLE", "Book with isbnNumber " + isbnNumber + " is not available"));
+        return bookMapper.toDto(book);
+    }
+
+    private static BooksDto getBooksDto(ExcelFile excelBook) {
+        BooksDto dto = new BooksDto();
+        dto.setBookName(excelBook.getBookName());
+        dto.setAuthorName(excelBook.getAuthorName());
+        dto.setPublisherName(excelBook.getPublisherName());
+        dto.setIsbnNumber(excelBook.getIsbnNumber());
+        dto.setBookQuantity(Long.parseLong(excelBook.getBookQuantity()));
+        dto.setAvailableCopies(excelBook.getAvailableCopies());
+        dto.setGenre(excelBook.getGenre());
+        dto.setLanguage(excelBook.getLanguage());
+        return dto;
+    }
+}
+
+
+    //    public void saveFromExcel(MultipartFile file) {
 //        try {
 //            File tempfile = File.createTempFile("books_data", ".xlsx");
 //            file.transferTo(tempfile);
@@ -99,18 +117,5 @@ public class BookServiceImp implements BookService {
 //        }
 //    }
 
-    private static BooksDto getBooksDto(ExcelFile excelBook) {
-        BooksDto dto = new BooksDto();
-        dto.setBookName(excelBook.getBookName());
-        dto.setAuthorName(excelBook.getAuthorName());
-        dto.setPublisherName(excelBook.getPublisherName());
-        dto.setIsbnNumber(excelBook.getIsbnNumber());
-        dto.setBookQuantity(Long.parseLong(excelBook.getBookQuantity()));
-        dto.setAvailableCopies(excelBook.getAvailableCopies());
-        dto.setGenre(excelBook.getGenre());
-        dto.setLanguage(excelBook.getLanguage());
-        return dto;
-    }
 
 
-}
