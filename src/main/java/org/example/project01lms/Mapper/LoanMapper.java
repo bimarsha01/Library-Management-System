@@ -7,16 +7,18 @@ import org.example.project01lms.Models.Loan;
 import org.mapstruct.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
-
 public interface LoanMapper {
 
-//    @Mapping(target = "id", ignore = true)
-    Loan toEntity(LoanCreationDto loanCreationDto);
+    @Mapping(target = "id", ignore = true)
 
-//    @Mapping(source = "id", target = "loanId")
+    Loan toEntity(LoanCreationDto dto);
+
+    @Mapping(target = "libraryId", source = "customers.libraryId")
+    @Mapping(target = "bookName", source = "book.bookName")
+    @Mapping(target = "authorName", source = "book.authorName")
+    @Mapping(target = "isbnNumber", source = "book.isbnNumber")
     LoanResponseDto toDto(Loan loan);
 
     List<LoanResponseDto> toDtoList(List<Loan> loanList);
@@ -24,7 +26,3 @@ public interface LoanMapper {
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateLoanFromDto(LoanUpdationDto dto, @MappingTarget Loan loan);
 }
-
-
-
-

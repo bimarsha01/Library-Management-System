@@ -5,10 +5,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.example.project01lms.Dto.LoanDto.LoanCreationDto;
 import org.example.project01lms.Dto.LoanDto.LoanResponseDto;
 import org.example.project01lms.Dto.LoanDto.LoanUpdationDto;
+import org.example.project01lms.ExceptionHandling.NotAvailableException;
 import org.example.project01lms.ExceptionHandling.NotFoundException;
 import org.example.project01lms.Helper.Update;
 import org.example.project01lms.Helper.Validation;
 import org.example.project01lms.Mapper.LoanMapper;
+import org.example.project01lms.Models.Book;
+import org.example.project01lms.Models.Customers;
 import org.example.project01lms.Models.Loan;
 import org.example.project01lms.Repo.BookRepo;
 import org.example.project01lms.Repo.CustomerRepo;
@@ -64,6 +67,16 @@ public class LoanServiceImpl implements LoanService {
     public LoanResponseDto save(LoanCreationDto loanCreationDto) {
         log.info("Creating new loan");
         Loan loan = loanMapper.toEntity(loanCreationDto);
+        Customers customer = customerRepo.findByLibraryId(loanCreationDto.getLibraryId())
+                .orElseThrow(() -> new NotAvailableException("NOT_FOUND " , "Customer not found"));
+
+        Book book = bookRepo.findByIsbnNumber(loanCreationDto.getIsbnNumber())
+                .orElseThrow(() -> new NotAvailableException("NOT_FOUND " , "Book not found"));
+
+        loan.setCustomers(customer);
+        loan.setBook(book);
+        loan.setBorrowDate(loanCreationDto.getBorrowDate());
+        loan.setDueDate(loanCreationDto.getDueDate());
         loan = loanRepo.save(loan);
         log.info("Loan created successfully with id {}", loan.getId());
         return loanMapper.toDto(loan);
