@@ -10,9 +10,10 @@ import org.mapstruct.*;
 import java.util.List;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
-
 public interface BookMapper {
-//    @Mapping(target = "bookId", ignore = true)
+
+    @Mapping(target = "bookId", ignore = true)
+//    @Mapping(target = "availableCopies", source = "bookQuantity")
     Book toEntity(BookCreationDto dto);
 
     BookResponseDto toDto(Book book);
@@ -21,8 +22,4 @@ public interface BookMapper {
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateBookFromDto(BookUpdationDto dto, @MappingTarget Book book);
-
 }
-
-//need to put all the mapper and all that so that java recognizes this code and doesnot give me any null value
-

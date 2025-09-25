@@ -10,7 +10,7 @@ import org.example.project01lms.Dto.BookDto.BooksDto;
 import org.example.project01lms.Repo.CustomerRepo;
 import org.example.project01lms.Response.ApiResponse;
 import org.example.project01lms.Services.BookService.BookService;
-import org.example.project01lms.Services.BookService.BookServiceImp;
+import org.example.project01lms.Services.BookService.BookServiceImpl;
 import org.example.project01lms.Services.CustomerServices.CustomerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,9 +27,9 @@ public class BookController extends BaseController {
     public final BookService bookService;
     private final CustomerRepo customerRepo;
     private final CustomerService customerService;
-    private final BookServiceImp bookServiceImp;
+    private final BookServiceImpl bookServiceImp;
 
-    public BookController(BookService bookService, CustomerRepo customerRepo, CustomerService customerService, BookServiceImp bookServiceImp) {
+    public BookController(BookService bookService, CustomerRepo customerRepo, CustomerService customerService, BookServiceImpl bookServiceImp) {
         this.bookService = bookService;
         this.customerRepo = customerRepo;
         this.customerService = customerService;

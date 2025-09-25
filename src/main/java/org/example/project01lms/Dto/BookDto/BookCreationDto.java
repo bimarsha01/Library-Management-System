@@ -33,18 +33,9 @@ public class BookCreationDto {
     @NotNull(message = FieldErrorConstant.NOT_NULL)
     private Long bookQuantity;
 
-    @NotNull(message = FieldErrorConstant.NOT_NULL)
-    private Long availableCopies;
-
     @NotBlank(message = FieldErrorConstant.NOT_BLANK)
     private String genre;
 
     @NotBlank(message = FieldErrorConstant.NOT_BLANK)
     private String language;
 }
-
-
-
-
-
-//something is going wrong her with this code and needs to be rechecked.
