@@ -91,5 +91,17 @@ public class LoanController extends BaseController {
             return ResponseEntity.ok(successResponse("Customer creation Failed" , Boolean.FALSE , null));
         }
     }
+    @GetMapping("/findall")
+    public ResponseEntity<ApiResponse> findAll(){
+        LoanResponseDto loanResponseDto = (LoanResponseDto) loanService.findAll();
+        if( loanResponseDto != null){
+//            log.info("Loan has been set for customer {}" ,libraryId);
+            return ResponseEntity.ok(successResponse("Customer created Successfully" , Boolean.TRUE , loanResponseDto));
+        }
+        else{
+            log.info("Loan was not approved");
+            return ResponseEntity.ok(successResponse("Customer creation Failed" , Boolean.FALSE , null));
+        }
+    }
 
 }
