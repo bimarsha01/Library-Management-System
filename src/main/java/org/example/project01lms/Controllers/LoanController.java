@@ -10,6 +10,8 @@ import org.example.project01lms.Services.LoanService.LoanService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/customer/loan")
 @Slf4j
@@ -93,7 +95,7 @@ public class LoanController extends BaseController {
     }
     @GetMapping("/findall")
     public ResponseEntity<ApiResponse> findAll(){
-        LoanResponseDto loanResponseDto = (LoanResponseDto) loanService.findAll();
+        List<LoanResponseDto> loanResponseDto =loanService.findAll();
         if( loanResponseDto != null){
 //            log.info("Loan has been set for customer {}" ,libraryId);
             return ResponseEntity.ok(successResponse("Customer created Successfully" , Boolean.TRUE , loanResponseDto));

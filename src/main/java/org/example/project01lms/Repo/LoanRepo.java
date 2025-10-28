@@ -29,4 +29,6 @@ public interface LoanRepo extends JpaRepository<Loan, Long> {
     Optional<Loan> findByCustomers_libraryId(String libraryId);
 
     List<Loan> id(Long id);
+
+    List<Loan> findAll();
 }

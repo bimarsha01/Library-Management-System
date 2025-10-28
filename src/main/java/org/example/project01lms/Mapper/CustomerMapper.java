@@ -20,7 +20,6 @@ public interface CustomerMapper {
 
     List<CustomerResponseDto> toDtoList(List<Customers> customersList);
 
-    // For updates, ignore nulls
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateCustomerFromDto(CustomerUpdationDto dto, @MappingTarget Customers customers);
 }

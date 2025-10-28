@@ -12,8 +12,8 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface BookMapper {
 
-    @Mapping(target = "bookId", ignore = true) // always ignore ID for creation
-    @Mapping(target = "availableCopies", source = "bookQuantity") // initialize availableCopies
+    @Mapping(target = "bookId", ignore = true)
+    @Mapping(target = "availableCopies", source = "bookQuantity")
     Book toEntity(BookCreationDto dto);
 
     BookResponseDto toDto(Book book);

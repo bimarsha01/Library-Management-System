@@ -105,7 +105,7 @@ public class LoanServiceImpl implements LoanService {
     @Override
     public List<LoanResponseDto> findAll() {
         log.info("Fetching all loans");
-        return loanMapper.toDtoList(loanRepo.findAll());
+        return loanMapper.toDtoList( loanRepo.findAll());
     }
 
     @Override
